@@ -1,7 +1,5 @@
-# Prerequisites
-*.d
-
 # Compiled Object files
+**/.DS_Store
 *.slo
 *.lo
 *.o
@@ -30,3 +28,46 @@
 *.exe
 *.out
 *.app
+
+**/cmake-build-*
+**/CMakeCache.txt
+**/cmake_install.cmake
+**/install_manifest.txt
+**/CMakeFiles/
+**/CTestTestfile.cmake
+**/Makefile
+**/*.cbp
+**/CMakeScripts
+**/compile_commands.json
+
+include/divisible/*
+
+
+## Local
+
+.idea/*.xml
+
+build/**/*
+
+include/*
+lib/*
+bin/*
+test/test_runner
+
+## IDEs
+.idea
+.vs
+.vscode
+
+## cmake
+CMakeLists.txt.user
+CMakeCache.txt
+CMakeFiles
+CMakeScripts
+Testing
+Makefile
+cmake_install.cmake
+install_manifest.txt
+compile_commands.json
+CTestTestfile.cmake
+_deps
