@@ -3,11 +3,12 @@
 #include <string>
 #include <utility>
 
-#define RKE_PRINT_MOVING(paramName, moving) \
-  std::cout << "Variable " << std::quoted(paramName) << ": " << moving << std::endl
+#define RKE_PRINT_MOVING(paramName, moving)                                                  \
+  std::cout << "At line " << __LINE__ << ": variable " << std::quoted(paramName) << " with " \
+            << moving << std::endl
 
 #define RKE_PRINT_MOVING_CONSTRUCTOR() \
-  std::cout << __FUNCTION__ << "() at line " << __LINE__ << " with " << (*this) << std::endl
+  std::cout << "\t" << __FUNCTION__ << "() at line " << __LINE__ << " with " << (*this) << std::endl
 
 namespace rke {
   class Moving {
@@ -22,22 +23,23 @@ namespace rke {
     Moving& operator=(Moving&& other) noexcept;
 
     [[nodiscard]] int i() const { return i_; }
-    [[nodiscard]] int iInital() const { return iInitial_; }
+    [[nodiscard]] int count() const { return count_; }
     [[nodiscard]] const std::string& str() const { return str_; }
 
    private:
     int i_;
-    int iInitial_;
+    int count_;
     std::string str_;
   };
 
   std::ostream& operator<<(std::ostream& out, const Moving& moving) {
-    return out << "{" << std::quoted("i") << ": " << moving.i() << ", " << std::quoted("iInitial")
-               << ": " << moving.iInital() << ", " << std::quoted("str") << ": "
+    return out << "{" << std::quoted("i") << ": " << moving.i() << ", " << std::quoted("count")
+               << ": " << moving.count() << ", " << std::quoted("str") << ": "
                << std::quoted(moving.str()) << "}";
   }
 
-  Moving::Moving(int i, std::string str) : i_(i), iInitial_(i), str_(std::move(str)) {
+  Moving::Moving(int i, std::string str)
+      : i_(i), count_(0), str_(std::move(str) + "_constructing") {
     RKE_PRINT_MOVING_CONSTRUCTOR();
   }
 
@@ -45,34 +47,36 @@ namespace rke {
     RKE_PRINT_MOVING_CONSTRUCTOR();
   }
 
-  Moving::Moving(const Moving& other) : i_(other.i_), iInitial_(other.i_), str_(other.str_) {
-    i_++;
+  Moving::Moving(const Moving& other) : count_(other.count_), i_(other.i_), str_(other.str_) {
+    count_++;
     str_ += "_copying";
     RKE_PRINT_MOVING_CONSTRUCTOR();
   }
 
   Moving::Moving(Moving&& other) noexcept
-      : i_(other.i_), iInitial_(other.i_), str_(std::move(other.str_)) {
-    i_++;
+      : count_(other.count_), i_(other.i_), str_(std::move(other.str_)) {
+    count_++;
     str_ += "_moving";
     RKE_PRINT_MOVING_CONSTRUCTOR();
   }
 
   Moving& Moving::operator=(const Moving& other) {
+    count_ = other.count_;
     i_ = other.i_;
     str_ = other.str_;
-    i_++;
+    count_++;
     str_ += "_assigning";
     RKE_PRINT_MOVING_CONSTRUCTOR();
     return *this;
   }
 
   Moving& Moving::operator=(Moving&& other) noexcept {
+    std::swap(count_, other.count_);
     std::swap(i_, other.i_);
     std::swap(str_, other.str_);
-    i_++;
+    count_++;
     str_ += "_moveassigning";
-    std::cout << __FUNCTION__ << "() at line " << __LINE__ << " with " << *this << std::endl;
+    RKE_PRINT_MOVING_CONSTRUCTOR();
     return *this;
   }
 
