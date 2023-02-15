@@ -1,6 +1,7 @@
 #include <iomanip>
 #include <iostream>
 #include <string>
+#include <utility>
 
 #define RKE_PRINT_MOVING(paramName, moving)                                                  \
   std::cout << "Variable " << std::quoted(paramName) << ": {" << std::quoted("i") << ": "    \
@@ -14,15 +15,16 @@
 namespace rke {
   class Moving {
    public:
-    Moving(int i, std::string str) : i_(i), iInitial_(i), str_(str) {
+    Moving(int i, std::string str) : i_(i), iInitial_(i), str_(std::move(str)) {
       RKE_PRINT_MOVING_CONSTRUCTOR();
     }
-    Moving(const Moving& other) : i_(other.i_), str_(other.str_) {
+    Moving(const Moving& other) : i_(other.i_), iInitial_(other.i_), str_(other.str_) {
       i_++;
       str_ += "_copying";
       RKE_PRINT_MOVING_CONSTRUCTOR();
     }
-    Moving(Moving&& other) : i_(std::move(other.i_)), str_(std::move(other.str_)) {
+    Moving(Moving&& other) noexcept
+        : i_(other.i_), iInitial_(other.i_), str_(std::move(other.str_)) {
       i_++;
       str_ += "_moving";
       RKE_PRINT_MOVING_CONSTRUCTOR();
@@ -38,7 +40,7 @@ namespace rke {
       RKE_PRINT_MOVING_CONSTRUCTOR();
       return *this;
     }
-    Moving& operator=(Moving&& other) {
+    Moving& operator=(Moving&& other) noexcept {
       std::swap(i_, other.i_);
       std::swap(str_, other.str_);
       i_++;
@@ -47,9 +49,9 @@ namespace rke {
       return *this;
     }
 
-    const int& i() const { return i_; }
-    const int& iInital() const { return iInitial_; }
-    const std::string& str() const { return str_; }
+    [[nodiscard]] int i() const { return i_; }
+    [[nodiscard]] int iInital() const { return iInitial_; }
+    [[nodiscard]] const std::string& str() const { return str_; }
 
    private:
     int i_;
@@ -73,7 +75,7 @@ int main() {
   std::cout << std::endl;
 
   auto moving3(std::move(moving1));
-  RKE_PRINT_MOVING("moving1", moving1);
+  RKE_PRINT_MOVING("moving1", moving1);  // NOLINT(bugprone-use-after-move)
   RKE_PRINT_MOVING("moving3", moving3);
   std::cout << std::endl;
 
@@ -91,7 +93,7 @@ int main() {
   std::cout << std::endl;
 
   auto moving6 = std::move(moving5);
-  RKE_PRINT_MOVING("moving5", moving5);
+  RKE_PRINT_MOVING("moving5", moving5);  // NOLINT(bugprone-use-after-move)
   RKE_PRINT_MOVING("moving6", moving6);
   std::cout << std::endl;
 
