@@ -3,51 +3,23 @@
 #include <string>
 #include <utility>
 
-#define RKE_PRINT_MOVING(paramName, moving)                                                  \
-  std::cout << "Variable " << std::quoted(paramName) << ": {" << std::quoted("i") << ": "    \
-            << moving.i() << ", " << std::quoted("str") << ": " << std::quoted(moving.str()) \
-            << "}" << std::endl;
+#define RKE_PRINT_MOVING(paramName, moving) \
+  std::cout << "Variable " << std::quoted(paramName) << ": " << moving << std::endl
 
-#define RKE_PRINT_MOVING_CONSTRUCTOR()                                \
-  std::cout << __FUNCTION__ << "() at line " << __LINE__ << " with "; \
-  RKE_PRINT_MOVING("this", (*this));
+#define RKE_PRINT_MOVING_CONSTRUCTOR() \
+  std::cout << __FUNCTION__ << "() at line " << __LINE__ << " with " << (*this) << std::endl
 
 namespace rke {
   class Moving {
    public:
-    Moving(int i, std::string str) : i_(i), iInitial_(i), str_(std::move(str)) {
-      RKE_PRINT_MOVING_CONSTRUCTOR();
-    }
-    Moving(const Moving& other) : i_(other.i_), iInitial_(other.i_), str_(other.str_) {
-      i_++;
-      str_ += "_copying";
-      RKE_PRINT_MOVING_CONSTRUCTOR();
-    }
-    Moving(Moving&& other) noexcept
-        : i_(other.i_), iInitial_(other.i_), str_(std::move(other.str_)) {
-      i_++;
-      str_ += "_moving";
-      RKE_PRINT_MOVING_CONSTRUCTOR();
-    }
+    Moving(int i, std::string str);
+    virtual ~Moving();
 
-    virtual ~Moving() { RKE_PRINT_MOVING_CONSTRUCTOR(); }
+    Moving(const Moving& other);
+    Moving(Moving&& other) noexcept;
 
-    Moving& operator=(const Moving& other) {
-      i_ = other.i_;
-      str_ = other.str_;
-      i_++;
-      str_ += "_assigning";
-      RKE_PRINT_MOVING_CONSTRUCTOR();
-      return *this;
-    }
-    Moving& operator=(Moving&& other) noexcept {
-      std::swap(i_, other.i_);
-      std::swap(str_, other.str_);
-      i_++;
-      str_ += "_moveassigning";
-      RKE_PRINT_MOVING_CONSTRUCTOR();
-      return *this;
-    }
+    Moving& operator=(const Moving& other);
+    Moving& operator=(Moving&& other) noexcept;
 
     [[nodiscard]] int i() const { return i_; }
     [[nodiscard]] int iInital() const { return iInitial_; }
@@ -58,6 +30,51 @@ namespace rke {
     int iInitial_;
     std::string str_;
   };
+
+  std::ostream& operator<<(std::ostream& out, const Moving& moving) {
+    return out << "{" << std::quoted("i") << ": " << moving.i() << ", " << std::quoted("iInitial")
+               << ": " << moving.iInital() << ", " << std::quoted("str") << ": "
+               << std::quoted(moving.str()) << "}";
+  }
+
+  Moving::Moving(int i, std::string str) : i_(i), iInitial_(i), str_(std::move(str)) {
+    RKE_PRINT_MOVING_CONSTRUCTOR();
+  }
+
+  Moving::~Moving() {
+    RKE_PRINT_MOVING_CONSTRUCTOR();
+  }
+
+  Moving::Moving(const Moving& other) : i_(other.i_), iInitial_(other.i_), str_(other.str_) {
+    i_++;
+    str_ += "_copying";
+    RKE_PRINT_MOVING_CONSTRUCTOR();
+  }
+
+  Moving::Moving(Moving&& other) noexcept
+      : i_(other.i_), iInitial_(other.i_), str_(std::move(other.str_)) {
+    i_++;
+    str_ += "_moving";
+    RKE_PRINT_MOVING_CONSTRUCTOR();
+  }
+
+  Moving& Moving::operator=(const Moving& other) {
+    i_ = other.i_;
+    str_ = other.str_;
+    i_++;
+    str_ += "_assigning";
+    RKE_PRINT_MOVING_CONSTRUCTOR();
+    return *this;
+  }
+
+  Moving& Moving::operator=(Moving&& other) noexcept {
+    std::swap(i_, other.i_);
+    std::swap(str_, other.str_);
+    i_++;
+    str_ += "_moveassigning";
+    std::cout << __FUNCTION__ << "() at line " << __LINE__ << " with " << *this << std::endl;
+    return *this;
+  }
 
   Moving mover(Moving moving) {
     return moving;
