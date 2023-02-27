@@ -10,8 +10,7 @@ jobs:
       fail-fast: false
 
       matrix:
-        #os: [ windows-2022, ubuntu-latest ]
-        os: [ windows-2022 ]
+        os: [ windows-2022, ubuntu-latest ]
         build-type: [ Release ]
         cxx-standard: [ 17, 20 ]
         warning-as-errors: [ ON ]
@@ -48,13 +47,13 @@ jobs:
       - name: Configure CMake
         run: |
           ${{ matrix.preconfigure-action }}
-          cmake -S . -B ${{github.workspace}}/build -G Ninja -DCMAKE_BUILD_TYPE=${{ matrix.build-type }} -DCMAKE_CXX_STANDARD=${{ matrix.cxx-standard }} -DCMAKE_COMPILE_WARNING_AS_ERROR=${{ matrix.warning-as-errors }} -DCMAKE_CXX_COMPILER_LAUNCHER=${{ matrix.CMAKE_CXX_COMPILER_LAUNCHER }}
+          cmake -S . -B ./build -G Ninja -DCMAKE_BUILD_TYPE=${{ matrix.build-type }} -DCMAKE_CXX_STANDARD=${{ matrix.cxx-standard }} -DCMAKE_COMPILE_WARNING_AS_ERROR=${{ matrix.warning-as-errors }} -DCMAKE_CXX_COMPILER_LAUNCHER=${{ matrix.CMAKE_CXX_COMPILER_LAUNCHER }}
 
       - name: Build
         run: |
-          cmake --build ${{github.workspace}}/build --config ${{ matrix.build-type }} -v
+          cmake --build ./build --config ${{ matrix.build-type }} -v
 
       - name: Test
-        working-directory: ${{github.workspace}}/build
+        working-directory: ./build
         run: |
           ctest -C ${{ matrix.build-type }} --extra-verbose
