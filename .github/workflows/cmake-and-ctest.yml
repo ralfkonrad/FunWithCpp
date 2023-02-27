@@ -1,0 +1,67 @@
+name: Build and Test with CMake and CTest
+
+on:
+  push: { }
+  pull_request: { }
+
+jobs:
+  build-and-test:
+    strategy:
+      fail-fast: false
+
+      matrix:
+        os: [ windows-latest, ubuntu-latest ]
+        build-type: [ Release ]
+        cxx-standard: [ 17, 20 ]
+        warning-as-errors: [ OFF, ON ]
+        generator: Ninja
+
+        include:
+          - os: ubuntu-latest
+            env:
+              CMAKE_CXX_COMPILER_LAUNCHER: ccache
+            setup: |
+              sudo apt update
+              sudo apt install ninja-build
+          - os: windows-latest
+            env:
+              CMAKE_CXX_COMPILER_LAUNCHER: sccache
+            setup: |
+              choco install -y ninja
+
+    runs-on: ${{ matrix.os }}
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Setup
+        run: ${{ matrix.setup }}
+
+      - name: Cache
+        uses: hendrikmuhs/ccache-action@v1.2
+        with:
+          key: ccache-${{ matrix.os }}-${{ github.job }}-${{ github.ref }}
+
+      - name: Configure CMake
+        run: >
+          cmake 
+            -S .
+            -B ${{github.workspace}}/build
+            -G ${{ matrix.generator }}
+            -DCMAKE_BUILD_TYPE=${{ matrix.build-type }}
+            -DCMAKE_CXX_STANDARD=${{ matrix.cxx-standard }}
+            -DCMAKE_COMPILE_WARNING_AS_ERROR=${{ matrix.warning-as-errors }}
+
+      - name: Build
+        run: >
+          cmake
+            --build ${{github.workspace}}/build
+            --config ${{ matrix.build-type }}
+            -v
+
+      - name: Test
+        working-directory: ${{github.workspace}}/build
+        run: >
+          ctest
+            -C ${{ matrix.build-type }}
+            --extra-verbose

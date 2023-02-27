@@ -1,10 +1,11 @@
-name: clang-format-lint
+name: Apply clang-format fixes
+
 on:
   push: { }
   pull_request: { }
 
 jobs:
-  build:
+  clang-format:
     runs-on: ubuntu-latest
 
     steps:

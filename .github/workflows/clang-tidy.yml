@@ -1,11 +1,11 @@
 name: Apply clang-tidy fixes
+
 on:
   push: { }
   pull_request: { }
-  workflow_dispatch:
 
 jobs:
-  check:
+  clang-tidy:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
