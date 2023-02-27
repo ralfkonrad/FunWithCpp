@@ -45,14 +45,10 @@ jobs:
       - name: Setup
         run: ${{ matrix.setup }}
 
-      - name: Configure CMake
+      - name: Configure CMake and Build
         run: |
           ${{ matrix.preconfigure-action }}
           cmake -S . -B ./build -G Ninja -DCMAKE_BUILD_TYPE=${{ matrix.build-type }} -DCMAKE_CXX_STANDARD=${{ matrix.cxx-standard }} -DCMAKE_COMPILE_WARNING_AS_ERROR=${{ matrix.warning-as-errors }} -DCMAKE_CXX_COMPILER_LAUNCHER=${{ matrix.CMAKE_CXX_COMPILER_LAUNCHER }}
-
-      - name: Build
-        run: |
-          ${{ matrix.preconfigure-action }}
           cmake --build ./build --config ${{ matrix.build-type }} -v
 
       - name: Test
