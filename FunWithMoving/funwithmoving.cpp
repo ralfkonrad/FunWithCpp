@@ -47,14 +47,14 @@ namespace rke {
     RKE_PRINT_MOVING_CONSTRUCTOR();
   }
 
-  Moving::Moving(const Moving& other) : count_(other.count_), i_(other.i_), str_(other.str_) {
+  Moving::Moving(const Moving& other) : i_(other.i_), count_(other.count_), str_(other.str_) {
     count_++;
     str_ += "_copying";
     RKE_PRINT_MOVING_CONSTRUCTOR();
   }
 
   Moving::Moving(Moving&& other) noexcept
-      : count_(other.count_), i_(other.i_), str_(std::move(other.str_)) {
+      : i_(other.i_), count_(other.count_), str_(std::move(other.str_)) {
     count_++;
     str_ += "_moving";
     RKE_PRINT_MOVING_CONSTRUCTOR();
