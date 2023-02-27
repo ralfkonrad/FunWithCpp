@@ -17,14 +17,12 @@ jobs:
 
         include:
           - os: ubuntu-latest
-            env:
-              CMAKE_CXX_COMPILER_LAUNCHER: ccache
+            CMAKE_CXX_COMPILER_LAUNCHER: ccache
             setup: |
               sudo apt update
               sudo apt install ninja-build
           - os: windows-latest
-            env:
-              CMAKE_CXX_COMPILER_LAUNCHER: sccache
+            CMAKE_CXX_COMPILER_LAUNCHER: sccache
             setup: |
               choco install -y ninja
 
@@ -43,7 +41,7 @@ jobs:
 
       - name: Configure CMake
         run: |
-          cmake -S . -B ${{github.workspace}}/build -G Ninja -DCMAKE_BUILD_TYPE=${{ matrix.build-type }} -DCMAKE_CXX_STANDARD=${{ matrix.cxx-standard }} -DCMAKE_COMPILE_WARNING_AS_ERROR=${{ matrix.warning-as-errors }}
+          cmake -S . -B ${{github.workspace}}/build -G Ninja -DCMAKE_BUILD_TYPE=${{ matrix.build-type }} -DCMAKE_CXX_STANDARD=${{ matrix.cxx-standard }} -DCMAKE_COMPILE_WARNING_AS_ERROR=${{ matrix.warning-as-errors }} -DCMAKE_CXX_COMPILER_LAUNCHER=${{ matrix.CMAKE_CXX_COMPILER_LAUNCHER }}
 
       - name: Build
         run: |
