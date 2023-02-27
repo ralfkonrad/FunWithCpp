@@ -24,9 +24,7 @@ namespace rke {
 
     [[nodiscard]] int i() const { return i_; }
     [[nodiscard]] int count() const { return count_; }
-    [[nodiscard]] const std::string& str() const {
-      return str_;
-    }
+    [[nodiscard]] const std::string& str() const { return str_; }
 
    private:
     int i_;
