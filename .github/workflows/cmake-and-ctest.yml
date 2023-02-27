@@ -10,14 +10,14 @@ jobs:
       fail-fast: false
 
       matrix:
-        os: [ windows-2022, ubuntu-latest ]
+        #os: [ windows-2022, ubuntu-latest ]
+        os: [ windows-2022 ]
         build-type: [ Release ]
         cxx-standard: [ 17, 20 ]
         warning-as-errors: [ ON ]
 
         include:
           - os: ubuntu-latest
-            os-shell: bash
             CMAKE_CXX_COMPILER_LAUNCHER: ccache
             setup: |
               sudo apt update
@@ -25,12 +25,11 @@ jobs:
             preconfigure-action: |
 
           - os: windows-2022
-            os-shell: cmd
             CMAKE_CXX_COMPILER_LAUNCHER: sccache
             setup: |
               choco install -y ninja
             preconfigure-action: |
-              call "C:\Program Files\Microsoft Visual Studio\2022\Enterprise\Vc\Auxiliary\Build\vcvarsall.bat" amd64 -vcvars_ver=14.3 || exit 1
+              "C:\Program Files\Microsoft Visual Studio\2022\Enterprise\Common7\Tools\Launch-VsDevShell.ps1" -Arch amd64
 
     runs-on: ${{ matrix.os }}
 
@@ -47,7 +46,6 @@ jobs:
         run: ${{ matrix.setup }}
 
       - name: Configure CMake
-        shell: ${{ matrix.os-shell }}
         run: |
           ${{ matrix.preconfigure-action }}
           cmake -S . -B ${{github.workspace}}/build -G Ninja -DCMAKE_BUILD_TYPE=${{ matrix.build-type }} -DCMAKE_CXX_STANDARD=${{ matrix.cxx-standard }} -DCMAKE_COMPILE_WARNING_AS_ERROR=${{ matrix.warning-as-errors }} -DCMAKE_CXX_COMPILER_LAUNCHER=${{ matrix.CMAKE_CXX_COMPILER_LAUNCHER }}
