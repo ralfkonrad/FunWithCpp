@@ -52,6 +52,7 @@ jobs:
 
       - name: Build
         run: |
+          ${{ matrix.preconfigure-action }}
           cmake --build ./build --config ${{ matrix.build-type }} -v
 
       - name: Test
