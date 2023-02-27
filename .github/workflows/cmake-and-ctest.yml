@@ -14,7 +14,6 @@ jobs:
         build-type: [ Release ]
         cxx-standard: [ 17, 20 ]
         warning-as-errors: [ OFF, ON ]
-        generator: Ninja
 
         include:
           - os: ubuntu-latest
@@ -43,25 +42,14 @@ jobs:
           key: ccache-${{ matrix.os }}-${{ github.job }}-${{ github.ref }}
 
       - name: Configure CMake
-        run: >
-          cmake 
-            -S .
-            -B ${{github.workspace}}/build
-            -G ${{ matrix.generator }}
-            -DCMAKE_BUILD_TYPE=${{ matrix.build-type }}
-            -DCMAKE_CXX_STANDARD=${{ matrix.cxx-standard }}
-            -DCMAKE_COMPILE_WARNING_AS_ERROR=${{ matrix.warning-as-errors }}
+        run: |
+          cmake -S . -B ${{github.workspace}}/build -G Ninja -DCMAKE_BUILD_TYPE=${{ matrix.build-type }} -DCMAKE_CXX_STANDARD=${{ matrix.cxx-standard }} -DCMAKE_COMPILE_WARNING_AS_ERROR=${{ matrix.warning-as-errors }}
 
       - name: Build
-        run: >
-          cmake
-            --build ${{github.workspace}}/build
-            --config ${{ matrix.build-type }}
-            -v
+        run: |
+          cmake --build ${{github.workspace}}/build --config ${{ matrix.build-type }} -v
 
       - name: Test
         working-directory: ${{github.workspace}}/build
-        run: >
-          ctest
-            -C ${{ matrix.build-type }}
-            --extra-verbose
+        run: |
+          ctest -C ${{ matrix.build-type }} --extra-verbose
