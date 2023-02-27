@@ -13,7 +13,7 @@ jobs:
         os: [ windows-latest, ubuntu-latest ]
         build-type: [ Release ]
         cxx-standard: [ 17, 20 ]
-        warning-as-errors: [ OFF, ON ]
+        warning-as-errors: [ ON ]
 
         include:
           - os: ubuntu-latest
@@ -31,13 +31,14 @@ jobs:
     steps:
       - uses: actions/checkout@v3
 
-      - name: Setup
-        run: ${{ matrix.setup }}
-
       - name: Cache
         uses: hendrikmuhs/ccache-action@v1.2
         with:
-          key: ccache-${{ matrix.os }}-${{ github.job }}-${{ github.ref }}
+          key: ${{ matrix.os }}-${{ github.job }}-${{ matrix.build-type }}-${{ matrix.build-type }}-${{ matrix.cxx-standard }}
+          restore-keys: ${{ matrix.os }}-
+
+      - name: Setup
+        run: ${{ matrix.setup }}
 
       - name: Configure CMake
         run: |
