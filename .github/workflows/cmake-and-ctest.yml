@@ -17,6 +17,7 @@ jobs:
 
         include:
           - os: ubuntu-latest
+            shell : bash
             CMAKE_CXX_COMPILER_LAUNCHER: ccache
             setup: |
               sudo apt update
@@ -24,6 +25,7 @@ jobs:
             preconfigure-action: |
 
           - os: windows-2022
+            shell: cmd
             CMAKE_CXX_COMPILER_LAUNCHER: sccache
             setup: |
               choco install -y ninja
@@ -45,6 +47,7 @@ jobs:
         run: ${{ matrix.setup }}
 
       - name: Configure CMake
+        shell: ${{ matrix.shell }}
         run: |
           ${{ matrix.preconfigure-action }}
           cmake -S . -B ${{github.workspace}}/build -G Ninja -DCMAKE_BUILD_TYPE=${{ matrix.build-type }} -DCMAKE_CXX_STANDARD=${{ matrix.cxx-standard }} -DCMAKE_COMPILE_WARNING_AS_ERROR=${{ matrix.warning-as-errors }} -DCMAKE_CXX_COMPILER_LAUNCHER=${{ matrix.CMAKE_CXX_COMPILER_LAUNCHER }}
