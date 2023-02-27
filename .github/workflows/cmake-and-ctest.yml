@@ -38,7 +38,7 @@ jobs:
       - name: Cache
         uses: hendrikmuhs/ccache-action@v1.2
         with:
-          key: ${{ matrix.os }}-${{ github.job }}-${{ matrix.build-type }}-${{ matrix.build-type }}-${{ matrix.cxx-standard }}
+          key: ${{ matrix.os }}-${{ github.job }}-${{ matrix.build-type }}-${{ matrix.cxx-standard }}
           restore-keys: ${{ matrix.os }}-
           variant: ${{ matrix.CMAKE_CXX_COMPILER_LAUNCHER }}
 
