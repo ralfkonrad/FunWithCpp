@@ -6,6 +6,8 @@ on:
 
 jobs:
   build-and-test:
+    env:
+      RKE_COMPILE_WARNING_AS_ERROR: ON
     strategy:
       fail-fast: false
 
@@ -13,7 +15,6 @@ jobs:
         os: [ windows-2022, ubuntu-latest ]
         build-type: [ Release ]
         cxx-standard: [ 17, 20 ]
-        warning-as-errors: [ ON ]
 
         include:
           - os: ubuntu-latest
@@ -49,7 +50,7 @@ jobs:
         run: |
           ${{ matrix.preconfigure-action }}
           cmake --version
-          cmake -S . -B ./build -G Ninja -DCMAKE_BUILD_TYPE=${{ matrix.build-type }} -DCMAKE_CXX_STANDARD=${{ matrix.cxx-standard }} -DCMAKE_COMPILE_WARNING_AS_ERROR=${{ matrix.warning-as-errors }} -DCMAKE_CXX_COMPILER_LAUNCHER=${{ matrix.CMAKE_CXX_COMPILER_LAUNCHER }}
+          cmake -S . -B ./build -G Ninja -DCMAKE_BUILD_TYPE=${{ matrix.build-type }} -DCMAKE_CXX_STANDARD=${{ matrix.cxx-standard }} -DCMAKE_CXX_COMPILER_LAUNCHER=${{ matrix.CMAKE_CXX_COMPILER_LAUNCHER }}
           cmake --build ./build --config ${{ matrix.build-type }} -v
 
       - name: Test
