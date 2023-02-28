@@ -21,7 +21,7 @@ jobs:
             setup: |
               sudo apt update
               sudo apt install ninja-build
-            preconfigure-action: |
+            preconfigure-action:
 
           - os: windows-2022
             CMAKE_CXX_COMPILER_LAUNCHER: sccache
@@ -48,6 +48,7 @@ jobs:
       - name: Configure CMake and Build
         run: |
           ${{ matrix.preconfigure-action }}
+          cmake --version
           cmake -S . -B ./build -G Ninja -DCMAKE_BUILD_TYPE=${{ matrix.build-type }} -DCMAKE_CXX_STANDARD=${{ matrix.cxx-standard }} -DCMAKE_COMPILE_WARNING_AS_ERROR=${{ matrix.warning-as-errors }} -DCMAKE_CXX_COMPILER_LAUNCHER=${{ matrix.CMAKE_CXX_COMPILER_LAUNCHER }}
           cmake --build ./build --config ${{ matrix.build-type }} -v
 
