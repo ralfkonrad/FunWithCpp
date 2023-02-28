@@ -6,8 +6,6 @@ on:
 
 jobs:
   build-and-test:
-    env:
-      RKE_COMPILE_WARNING_AS_ERROR: ON
     strategy:
       fail-fast: false
 
@@ -50,7 +48,7 @@ jobs:
         run: |
           ${{ matrix.preconfigure-action }}
           cmake --version
-          cmake -S . -B ./build -G Ninja -DCMAKE_BUILD_TYPE=${{ matrix.build-type }} -DCMAKE_CXX_STANDARD=${{ matrix.cxx-standard }} -DCMAKE_CXX_COMPILER_LAUNCHER=${{ matrix.CMAKE_CXX_COMPILER_LAUNCHER }}
+          cmake -S . -B ./build -G Ninja -DCMAKE_BUILD_TYPE=${{ matrix.build-type }} -DCMAKE_CXX_STANDARD=${{ matrix.cxx-standard }} -DRKE_COMPILE_WARNING_AS_ERROR=ON -DCMAKE_CXX_COMPILER_LAUNCHER=${{ matrix.CMAKE_CXX_COMPILER_LAUNCHER }}
           cmake --build ./build --config ${{ matrix.build-type }} -v
 
       - name: Test
