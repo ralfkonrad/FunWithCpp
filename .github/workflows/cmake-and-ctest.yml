@@ -11,8 +11,15 @@ jobs:
 
       matrix:
         os: [ windows-2022, ubuntu-latest ]
-        build-type: [ Release ]
         cxx-standard: [ 17, 20 ]
+        preset: [ linux-clang-release-ninja, linux-gcc-release-ninja, windows-vscl-release-ninja ]
+        exclude:
+          - os: windows-2022
+            preset: linux-clang-release-ninja
+          - os: windows-2022
+            preset: linux-gcc-release-ninja
+          - os: ubuntu-latest
+            preset: windows-vscl-release-ninja
 
         include:
           - os: ubuntu-latest
@@ -21,7 +28,6 @@ jobs:
               sudo apt update
               sudo apt install ninja-build
             preconfigure-action:
-            preset: [ linux-clang-release-ninja, linux-gcc-release-ninja ]
 
           - os: windows-2022
             CMAKE_CXX_COMPILER_LAUNCHER: sccache
@@ -29,7 +35,6 @@ jobs:
               choco install -y ninja
             preconfigure-action: |
               & "C:\Program Files\Microsoft Visual Studio\2022\Enterprise\Common7\Tools\Launch-VsDevShell.ps1" -Arch amd64
-            preset: [ windows-vsc-release-ninja ]
 
     runs-on: ${{ matrix.os }}
 
@@ -50,7 +55,7 @@ jobs:
         run: |
           ${{ matrix.preconfigure-action }}
           cmake --version
-          cmake --preset ${{ matrix.preset }} -DCMAKE_BUILD_TYPE=${{ matrix.build-type }} -DRKE_COMPILE_WARNING_AS_ERROR=ON -DCMAKE_CXX_STANDARD=${{ matrix.cxx-standard }} -DCMAKE_CXX_COMPILER_LAUNCHER=${{ matrix.CMAKE_CXX_COMPILER_LAUNCHER }}
+          cmake --preset ${{ matrix.preset }} -DCMAKE_CXX_STANDARD=${{ matrix.cxx-standard }} -DCMAKE_CXX_COMPILER_LAUNCHER=${{ matrix.CMAKE_CXX_COMPILER_LAUNCHER }}
           cmake --build --preset ${{ matrix.preset }} -v
 
       - name: Test
