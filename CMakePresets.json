@@ -1,5 +1,5 @@
 {
-  "version": 6,
+  "version": 3,
   "cmakeMinimumRequired": {
     "major": 3,
     "minor": 22,
@@ -79,8 +79,47 @@
   "buildPresets": [
     {
       "name": "default",
+      "configurePreset": "default"
+    },
+    {
+      "name": "linux-clang-debug-ninja",
+      "configurePreset": "linux-clang-debug-ninja",
+      "inherits": "default"
+    },
+    {
+      "name": "linux-clang-release-ninja",
+      "configurePreset": "linux-clang-release-ninja",
+      "inherits": "default"
+    },
+    {
+      "name": "linux-gcc-debug-ninja",
+      "configurePreset": "linux-gcc-debug-ninja",
+      "inherits": "default"
+    },
+    {
+      "name": "linux-gcc-release-ninja",
+      "configurePreset": "linux-gcc-release-ninja",
+      "inherits": "default"
+    },
+    {
+      "name": "windows-mscv-debug-ninja",
+      "configurePreset": "windows-mscv-debug-ninja",
+      "inherits": "default"
+    },
+    {
+      "name": "windows-mscv-release-ninja",
+      "configurePreset": "windows-mscv-release-ninja",
+      "inherits": "default"
+    }
+  ],
+  "testPresets": [
+    {
+      "name": "default",
       "configurePreset": "default",
-      "jobs": 12
+      "output": {
+        "verbosity": "extra",
+        "outputOnFailure": true
+      }
     },
     {
       "name": "linux-clang-debug-ninja",
