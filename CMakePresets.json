@@ -109,7 +109,7 @@
     },
     {
       "name": "windows-mscv-release-ninja",
-      "configurePreset": "windows-mscv-debug-ninja",
+      "configurePreset": "windows-mscv-release-ninja",
       "inherits": "default"
     }
   ]

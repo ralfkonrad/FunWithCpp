@@ -59,6 +59,5 @@ jobs:
           cmake --build --preset ${{ matrix.preset }} -v
 
       - name: Test
-        working-directory: ./build
         run: |
           ctest --preset ${{ matrix.preset }} --extra-verbose
