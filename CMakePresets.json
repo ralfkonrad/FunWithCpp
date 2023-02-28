@@ -65,14 +65,14 @@
       "name": "macos-clang-debug-ninja",
       "inherits": "linux-clang-debug-ninja",
       "cacheVariables": {
-        "CXXFLAGS": "-stdlib=libc++ -mmacosx-version-min=10.9"
+        "CMAKE_CXXFLAGS": "-stdlib=libc++ -mmacosx-version-min=10.9"
       }
     },
     {
       "name": "macos-clang-release-ninja",
       "inherits": "linux-clang-release-ninja",
       "cacheVariables": {
-        "CXXFLAGS": "-stdlib=libc++ -mmacosx-version-min=10.9"
+        "CMAKE_CXXFLAGS": "-stdlib=libc++ -mmacosx-version-min=10.9"
       }
     },
     {

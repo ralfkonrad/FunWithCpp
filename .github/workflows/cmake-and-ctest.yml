@@ -10,9 +10,24 @@ jobs:
       fail-fast: false
 
       matrix:
-        os: [ macos-latest, ubuntu-latest, windows-2022 ]
-        cxx-standard: [ 17, 20 ]
-        preset: [ linux-clang-release-ninja, linux-gcc-release-ninja, macos-clang-release-ninja, windows-mscv-release-ninja ]
+        os: [
+          macos-latest,
+          ubuntu-latest,
+          windows-2022
+        ]
+
+        cxx-standard: [
+          17,
+          20
+        ]
+
+        preset: [
+          linux-clang-release-ninja,
+          linux-gcc-release-ninja,
+          macos-clang-release-ninja,
+          windows-mscv-release-ninja
+        ]
+
         exclude:
           - os: macos-latest
             preset: linux-clang-release-ninja
@@ -20,10 +35,12 @@ jobs:
             preset: linux-gcc-release-ninja
           - os: macos-latest
             preset: windows-mscv-release-ninja
+
           - os: ubuntu-latest
             preset: macos-clang-release-ninja
           - os: ubuntu-latest
             preset: windows-mscv-release-ninja
+
           - os: windows-2022
             preset: linux-clang-release-ninja
           - os: windows-2022
@@ -33,20 +50,20 @@ jobs:
 
         include:
           - os: macos-latest
-            CMAKE_CXX_COMPILER_LAUNCHER: ccache
+            cmake_cxx_compiler_launcher: ccache
             setup: |
-              brew install ccache ninja
+              brew install ninja
             preconfigure-action:
 
           - os: ubuntu-latest
-            CMAKE_CXX_COMPILER_LAUNCHER: ccache
+            cmake_cxx_compiler_launcher: ccache
             setup: |
               sudo apt update
               sudo apt install ninja-build
             preconfigure-action:
 
           - os: windows-2022
-            CMAKE_CXX_COMPILER_LAUNCHER: sccache
+            cmake_cxx_compiler_launcher: sccache
             setup: |
               choco install -y ninja
             preconfigure-action: |
@@ -60,7 +77,7 @@ jobs:
       - name: Cache
         uses: hendrikmuhs/ccache-action@v1.2
         with:
-          key: ${{ matrix.os }}-${{ github.job }}-${{ matrix.build-type }}-${{ matrix.cxx-standard }}
+          key: ${{ matrix.os }}-${{ github.job }}-${{ matrix.cxx-standard }}
           restore-keys: ${{ matrix.os }}-
           variant: ${{ matrix.CMAKE_CXX_COMPILER_LAUNCHER }}
 
@@ -71,7 +88,7 @@ jobs:
         run: |
           ${{ matrix.preconfigure-action }}
           cmake --version
-          cmake --preset ${{ matrix.preset }} -DCMAKE_CXX_STANDARD=${{ matrix.cxx-standard }} -DCMAKE_CXX_COMPILER_LAUNCHER=${{ matrix.CMAKE_CXX_COMPILER_LAUNCHER }}
+          cmake --preset ${{ matrix.preset }} -DCMAKE_CXX_STANDARD=${{ matrix.cxx-standard }} -DCMAKE_CXX_COMPILER_LAUNCHER=${{ matrix.cmake_cxx_compiler_launcher }}
           cmake --build --preset ${{ matrix.preset }} -v
 
       - name: Test
