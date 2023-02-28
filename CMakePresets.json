@@ -71,8 +71,8 @@
     {
       "name": "macos-clang-release-ninja",
       "inherits": "linux-clang-release-ninja",
-      "cacheVariables": {
-        "CMAKE_CXXFLAGS": "-stdlib=libc++ -mmacosx-version-min=10.9"
+      "environment": {
+        "CXXFLAGS": "-stdlib=libc++ -mmacosx-version-min=10.9"
       }
     },
     {
