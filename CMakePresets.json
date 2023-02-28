@@ -1,5 +1,10 @@
 {
-  "version": 2,
+  "version": 6,
+  "cmakeMinimumRequired": {
+    "major": 3,
+    "minor": 22,
+    "patch": 0
+  },
   "configurePresets": [
     {
       "name": "default",
@@ -7,6 +12,21 @@
       "generator": "Ninja",
       "cacheVariables": {
         "RKE_COMPILE_WARNING_AS_ERROR": "ON"
+      }
+    },
+    {
+      "name": "msvc-default",
+      "inherits": "default",
+      "architecture": {
+        "value": "x64",
+        "strategy": "external"
+      },
+      "vendor": {
+        "microsoft.com/VisualStudioSettings/CMake/1.0": {
+          "hostOS": [
+            "Windows"
+          ]
+        }
       }
     },
     {
@@ -39,6 +59,20 @@
       "cacheVariables": {
         "CMAKE_BUILD_TYPE": "Release",
         "CMAKE_CXX_COMPILER": "g++"
+      }
+    },
+    {
+      "name": "windows-mscv-debug-ninja",
+      "inherits": "msvc-default",
+      "cacheVariables": {
+        "CMAKE_BUILD_TYPE": "Debug"
+      }
+    },
+    {
+      "name": "windows-mscv-release-ninja",
+      "inherits": "msvc-default",
+      "cacheVariables": {
+        "CMAKE_BUILD_TYPE": "Release"
       }
     }
   ],
@@ -66,6 +100,16 @@
     {
       "name": "linux-gcc-release-ninja",
       "configurePreset": "linux-gcc-release-ninja",
+      "inherits": "default"
+    },
+    {
+      "name": "windows-mscv-debug-ninja",
+      "configurePreset": "windows-mscv-debug-ninja",
+      "inherits": "default"
+    },
+    {
+      "name": "windows-mscv-release-ninja",
+      "configurePreset": "windows-mscv-debug-ninja",
       "inherits": "default"
     }
   ]

@@ -12,14 +12,14 @@ jobs:
       matrix:
         os: [ windows-2022, ubuntu-latest ]
         cxx-standard: [ 17, 20 ]
-        preset: [ linux-clang-release-ninja, linux-gcc-release-ninja, windows-vscl-release-ninja ]
+        preset: [ linux-clang-release-ninja, linux-gcc-release-ninja, windows-mscv-release-ninja ]
         exclude:
           - os: windows-2022
             preset: linux-clang-release-ninja
           - os: windows-2022
             preset: linux-gcc-release-ninja
           - os: ubuntu-latest
-            preset: windows-vscl-release-ninja
+            preset: windows-mscv-release-ninja
 
         include:
           - os: ubuntu-latest
@@ -61,4 +61,4 @@ jobs:
       - name: Test
         working-directory: ./build
         run: |
-          ctest -C ${{ matrix.build-type }} --extra-verbose
+          ctest --preset ${{ matrix.preset }} --extra-verbose
