@@ -62,6 +62,20 @@
       }
     },
     {
+      "name": "macos-clang-debug-ninja",
+      "inherits": "linux-clang-debug-ninja",
+      "cacheVariables": {
+        "CXXFLAGS": "-stdlib=libc++ -mmacosx-version-min=10.9"
+      }
+    },
+    {
+      "name": "macos-clang-release-ninja",
+      "inherits": "linux-clang-release-ninja",
+      "cacheVariables": {
+        "CXXFLAGS": "-stdlib=libc++ -mmacosx-version-min=10.9"
+      }
+    },
+    {
       "name": "windows-mscv-debug-ninja",
       "inherits": "msvc-default",
       "cacheVariables": {
@@ -102,6 +116,16 @@
       "inherits": "default"
     },
     {
+      "name": "macos-clang-debug-ninja",
+      "configurePreset": "macos-clang-debug-ninja",
+      "inherits": "default"
+    },
+    {
+      "name": "macos-clang-release-ninja",
+      "configurePreset": "macos-clang-release-ninja",
+      "inherits": "default"
+    },
+    {
       "name": "windows-mscv-debug-ninja",
       "configurePreset": "windows-mscv-debug-ninja",
       "inherits": "default"
@@ -139,6 +163,16 @@
     {
       "name": "linux-gcc-release-ninja",
       "configurePreset": "linux-gcc-release-ninja",
+      "inherits": "default"
+    },
+    {
+      "name": "macos-clang-debug-ninja",
+      "configurePreset": "macos-clang-debug-ninja",
+      "inherits": "default"
+    },
+    {
+      "name": "macos-clang-release-ninja",
+      "configurePreset": "macos-clang-release-ninja",
       "inherits": "default"
     },
     {

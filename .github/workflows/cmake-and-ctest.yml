@@ -10,18 +10,34 @@ jobs:
       fail-fast: false
 
       matrix:
-        os: [ windows-2022, ubuntu-latest ]
+        os: [ macos-latest, ubuntu-latest, windows-2022 ]
         cxx-standard: [ 17, 20 ]
-        preset: [ linux-clang-release-ninja, linux-gcc-release-ninja, windows-mscv-release-ninja ]
+        preset: [ linux-clang-release-ninja, linux-gcc-release-ninja, macos-clang-release-ninja, windows-mscv-release-ninja ]
         exclude:
-          - os: windows-2022
-            preset:
-              - linux-clang-release-ninja
-              - linux-gcc-release-ninja
+          - os: macos-latest
+            preset: linux-clang-release-ninja
+          - os: macos-latest
+            preset: linux-gcc-release-ninja
+          - os: macos-latest
+            preset: windows-mscv-release-ninja
+          - os: ubuntu-latest
+            preset: macos-clang-release-ninja
           - os: ubuntu-latest
             preset: windows-mscv-release-ninja
+          - os: windows-2022
+            preset: linux-clang-release-ninja
+          - os: windows-2022
+            preset: linux-gcc-release-ninja
+          - os: windows-2022
+            preset: macos-clang-release-ninja
 
         include:
+          - os: macos-latest
+            CMAKE_CXX_COMPILER_LAUNCHER: ccache
+            setup: |
+              brew install ccache ninja
+            preconfigure-action:
+
           - os: ubuntu-latest
             CMAKE_CXX_COMPILER_LAUNCHER: ccache
             setup: |
