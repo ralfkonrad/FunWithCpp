@@ -1,14 +1,18 @@
 cmake_minimum_required(VERSION 3.22.0)
 project(FunWithCpp VERSION 0.0.1)
 
-set(CMAKE_CXX_STANDARD_REQUIRED ON)
-set(CMAKE_CXX_EXTENSIONS OFF)
-
 option(RKE_USE_CLANG_TIDY "Enables clang tidy. OFF by default." OFF)
 option(RKE_COMPILE_WARNING_AS_ERROR "If turned ON, treats all warnings as errors. OFF by default." OFF)
 
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+set(CMAKE_CXX_EXTENSIONS OFF)
+
 if (NOT DEFINED CMAKE_CXX_STANDARD)
     set(CMAKE_CXX_STANDARD 17)
+endif ()
+
+if (CMAKE_CXX_STANDARD LESS 17)
+    message(FATAL_ERROR "Please specify CMAKE_CXX_STANDARD of 17 or higher")
 endif ()
 
 if (MSVC)
