@@ -1,4 +1,12 @@
 cmake_minimum_required(VERSION 3.22.0)
+
+# Default build type for single-config generators (set this before project() command)
+# For multi-config generators, such as Visual Studio, use: cmake --build . --config=<CONFIG>
+if (NOT CMAKE_BUILD_TYPE OR CMAKE_BUILD_TYPE STREQUAL "")
+    set(CMAKE_BUILD_TYPE "Release" CACHE
+            STRING "Build type for single-config generators" FORCE)
+endif ()
+
 project(FunWithCpp VERSION 0.0.1)
 
 option(RKE_USE_CLANG_TIDY "Enables clang tidy. OFF by default." OFF)
