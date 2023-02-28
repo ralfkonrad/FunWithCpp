@@ -1,0 +1,72 @@
+{
+  "version": 2,
+  "configurePresets": [
+    {
+      "name": "default",
+      "binaryDir": "${sourceDir}/build/${presetName}",
+      "generator": "Ninja",
+      "cacheVariables": {
+        "RKE_COMPILE_WARNING_AS_ERROR": "ON"
+      }
+    },
+    {
+      "name": "linux-clang-debug-ninja",
+      "inherits": "default",
+      "cacheVariables": {
+        "CMAKE_BUILD_TYPE": "Debug",
+        "CMAKE_CXX_COMPILER": "clang++"
+      }
+    },
+    {
+      "name": "linux-clang-release-ninja",
+      "inherits": "default",
+      "cacheVariables": {
+        "CMAKE_BUILD_TYPE": "Release",
+        "CMAKE_CXX_COMPILER": "clang++"
+      }
+    },
+    {
+      "name": "linux-gcc-debug-ninja",
+      "inherits": "default",
+      "cacheVariables": {
+        "CMAKE_BUILD_TYPE": "Debug",
+        "CMAKE_CXX_COMPILER": "g++"
+      }
+    },
+    {
+      "name": "linux-gcc-release-ninja",
+      "inherits": "default",
+      "cacheVariables": {
+        "CMAKE_BUILD_TYPE": "Release",
+        "CMAKE_CXX_COMPILER": "g++"
+      }
+    }
+  ],
+  "buildPresets": [
+    {
+      "name": "default",
+      "configurePreset": "default",
+      "jobs": 12
+    },
+    {
+      "name": "linux-clang-debug-ninja",
+      "configurePreset": "linux-clang-debug-ninja",
+      "inherits": "default"
+    },
+    {
+      "name": "linux-clang-release-ninja",
+      "configurePreset": "linux-clang-release-ninja",
+      "inherits": "default"
+    },
+    {
+      "name": "linux-gcc-debug-ninja",
+      "configurePreset": "linux-gcc-debug-ninja",
+      "inherits": "default"
+    },
+    {
+      "name": "linux-gcc-release-ninja",
+      "configurePreset": "linux-gcc-release-ninja",
+      "inherits": "default"
+    }
+  ]
+}
