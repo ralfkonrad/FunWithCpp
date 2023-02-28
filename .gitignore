@@ -595,5 +595,10 @@ FodyWeavers.xsd
 # End of https://www.toptal.com/developers/gitignore/api/c,c++,clion+iml,cmake,ninja,visualstudio,visualstudiocode
 
 ### User defined ###
-build/
+# my favorite editors
 .idea/
+.vs/
+.vscode/
+
+# my favorite build directory
+build/
