@@ -15,9 +15,9 @@ jobs:
         preset: [ linux-clang-release-ninja, linux-gcc-release-ninja, windows-mscv-release-ninja ]
         exclude:
           - os: windows-2022
-            preset: linux-clang-release-ninja
-          - os: windows-2022
-            preset: linux-gcc-release-ninja
+            preset:
+              - linux-clang-release-ninja
+              - linux-gcc-release-ninja
           - os: ubuntu-latest
             preset: windows-mscv-release-ninja
 
@@ -60,4 +60,4 @@ jobs:
 
       - name: Test
         run: |
-          ctest --preset ${{ matrix.preset }} --extra-verbose
+          ctest --preset ${{ matrix.preset }}
