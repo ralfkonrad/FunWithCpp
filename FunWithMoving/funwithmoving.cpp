@@ -3,17 +3,13 @@
 #include <string>
 #include <utility>
 
-#define RKE_PRINT_MOVING(paramName, moving)                                                  \
-  std::cout << "At line " << __LINE__ << ": variable " << std::quoted(paramName) << " with " \
-            << moving << std::endl
-
-#define RKE_PRINT_MOVING_CONSTRUCTOR() \
-  std::cout << "\t" << __FUNCTION__ << "() at line " << __LINE__ << " with " << (*this) << std::endl
+#define RKE_PRINT_VARIABLE(paramName, variable) \
+  std::cout << "Variable " << std::quoted(paramName) << " with " << (variable) << std::endl
 
 namespace rke {
   class Moving {
    public:
-    Moving(int i, std::string str);
+    explicit Moving(int i);
     virtual ~Moving();
 
     Moving(const Moving& other);
@@ -28,7 +24,7 @@ namespace rke {
 
    private:
     int i_;
-    int count_;
+    int count_ = 1;
     std::string str_;
   };
 
@@ -38,26 +34,22 @@ namespace rke {
                << std::quoted(moving.str()) << "}";
   }
 
-  Moving::Moving(int i, std::string str)
-      : i_(i), count_(0), str_(std::move(str) + "_constructing") {
-    RKE_PRINT_MOVING_CONSTRUCTOR();
-  }
+  Moving::Moving(int i) : i_(i), str_(std::to_string(i) + "_constructing") {}
 
   Moving::~Moving() {
-    RKE_PRINT_MOVING_CONSTRUCTOR();
+    count_--;
+    std::cout << "               Deleting " << (*this) << std::endl;
   }
 
   Moving::Moving(const Moving& other) : i_(other.i_), count_(other.count_), str_(other.str_) {
     count_++;
     str_ += "_copying";
-    RKE_PRINT_MOVING_CONSTRUCTOR();
   }
 
   Moving::Moving(Moving&& other) noexcept
       : i_(other.i_), count_(other.count_), str_(std::move(other.str_)) {
     count_++;
     str_ += "_moving";
-    RKE_PRINT_MOVING_CONSTRUCTOR();
   }
 
   Moving& Moving::operator=(const Moving& other) {
@@ -66,7 +58,6 @@ namespace rke {
     str_ = other.str_;
     count_++;
     str_ += "_assigning";
-    RKE_PRINT_MOVING_CONSTRUCTOR();
     return *this;
   }
 
@@ -76,53 +67,59 @@ namespace rke {
     std::swap(str_, other.str_);
     count_++;
     str_ += "_moveassigning";
-    RKE_PRINT_MOVING_CONSTRUCTOR();
     return *this;
   }
 
-  Moving mover(Moving moving) {
+  Moving mover(const Moving& moving) {
     return moving;
   }
 }  // namespace rke
 
 int main() {
-  auto moving1 = rke::Moving(1, "rke1");
-  RKE_PRINT_MOVING("moving1", moving1);
+  rke::Moving moving1(1);
+  RKE_PRINT_VARIABLE("moving1", moving1);
+
+  /* auto moving2 = rke::Moving(2); does not first call the constructor and then the (move)
+   * assigment operator but just the constructor as moving2 was previously unassigned. */
+  auto moving2 = rke::Moving(2);
+  RKE_PRINT_VARIABLE("moving2", moving2);
   std::cout << std::endl;
 
-  auto moving2(moving1);
-  RKE_PRINT_MOVING("moving1", moving1);
-  RKE_PRINT_MOVING("moving2", moving2);
+  /* auto moving3(moving1); obviously calls copy constructor. */
+  auto moving3(moving1);  // NOLINT(performance-unnecessary-copy-initialization)
+  RKE_PRINT_VARIABLE("moving1", moving1);
+  RKE_PRINT_VARIABLE("moving3", moving3);
   std::cout << std::endl;
 
-  auto moving3(std::move(moving1));
-  RKE_PRINT_MOVING("moving1", moving1);  // NOLINT(bugprone-use-after-move)
-  RKE_PRINT_MOVING("moving3", moving3);
+  /* auto moving4 = moving1; also calls the copy constructor.  */
+  auto moving4 = moving1;  // NOLINT(performance-unnecessary-copy-initialization)
+  RKE_PRINT_VARIABLE("moving1", moving1);
+  RKE_PRINT_VARIABLE("moving4", moving4);
   std::cout << std::endl;
 
-  moving3 = moving2;
-  RKE_PRINT_MOVING("moving2", moving2);
-  RKE_PRINT_MOVING("moving3", moving3);
-  std::cout << std::endl;
-
-  auto moving4(rke::mover(rke::Moving(4, "rke4")));
-  RKE_PRINT_MOVING("moving4", moving4);
-  std::cout << std::endl;
-
-  auto moving5 = rke::mover(rke::Moving(5, "rke5"));
-  RKE_PRINT_MOVING("moving5", moving5);
-  std::cout << std::endl;
-
-  auto moving6 = std::move(moving5);
-  RKE_PRINT_MOVING("moving5", moving5);  // NOLINT(bugprone-use-after-move)
-  RKE_PRINT_MOVING("moving6", moving6);
-  std::cout << std::endl;
-
-  auto moving7 = rke::Moving(7, "rke7");
-  RKE_PRINT_MOVING("moving7", moving7);
-  moving7 = rke::Moving(8, "rke8");
-  RKE_PRINT_MOVING("moving7", moving7);
-  std::cout << std::endl;
+  //  moving3 = moving2;
+  //  RKE_PRINT_MOVING("moving2", moving2);
+  //  RKE_PRINT_MOVING("moving3", moving3);
+  //  std::cout << std::endl;
+  //
+  //  auto moving4(rke::mover(rke::Moving(4)));
+  //  RKE_PRINT_MOVING("moving4", moving4);
+  //  std::cout << std::endl;
+  //
+  //  auto moving5 = rke::mover(rke::Moving(5));
+  //  RKE_PRINT_MOVING("moving5", moving5);
+  //  std::cout << std::endl;
+  //
+  //  auto moving6 = std::move(moving5);
+  //  RKE_PRINT_MOVING("moving5", moving5);  // NOLINT(bugprone-use-after-move)
+  //  RKE_PRINT_MOVING("moving6", moving6);
+  //  std::cout << std::endl;
+  //
+  //  auto moving7 = rke::Moving(7);
+  //  RKE_PRINT_MOVING("moving7", moving7);
+  //  moving7 = rke::Moving(8);
+  //  RKE_PRINT_MOVING("moving7", moving7);
+  //  std::cout << std::endl;
 
   return 0;
 }
