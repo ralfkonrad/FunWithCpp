@@ -17,6 +17,10 @@
     {
       "name": "msvc-default",
       "inherits": "default",
+      "cacheVariables": {
+        "CMAKE_C_COMPILER": "cl",
+        "CMAKE_CXX_COMPILER": "cl"
+      },
       "architecture": {
         "value": "x64",
         "strategy": "external"

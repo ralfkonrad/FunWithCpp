@@ -48,16 +48,6 @@ jobs:
           - os: windows-2022
             preset: macos-clang-release-ninja
 
-        include:
-          - os: macos-latest
-            cmake_cxx_compiler_launcher: ccache
-
-          - os: ubuntu-latest
-            cmake_cxx_compiler_launcher: ccache
-
-          - os: windows-2022
-            cmake_cxx_compiler_launcher: sccache
-
     runs-on: ${{ matrix.os }}
 
     steps:
@@ -68,7 +58,7 @@ jobs:
         with:
           key: ${{ matrix.os }}-${{ github.job }}-${{ matrix.cxx-standard }}
           restore-keys: ${{ matrix.os }}-
-          variant: ${{ matrix.CMAKE_CXX_COMPILER_LAUNCHER }}
+          variant: ${{ ( (runner.os == 'Windows') && 'sccache' ) || 'ccache' }}
 
       - name: Setup Linux
         if: runner.os == 'Linux'
@@ -95,7 +85,7 @@ jobs:
       - name: Configure CMake and Build
         run: |
           cmake --version
-          cmake --preset ${{ matrix.preset }} -DCMAKE_CXX_STANDARD=${{ matrix.cxx-standard }} -DCMAKE_CXX_COMPILER_LAUNCHER=${{ matrix.cmake_cxx_compiler_launcher }}
+          cmake --preset ${{ matrix.preset }} -DCMAKE_CXX_STANDARD=${{ matrix.cxx-standard }}
           cmake --build --preset ${{ matrix.preset }} -v
 
       - name: Test
