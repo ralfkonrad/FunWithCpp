@@ -10,7 +10,7 @@ namespace rke {
   class Moving {
    public:
     explicit Moving(int i);
-    virtual ~Moving();
+    ~Moving();
 
     Moving(const Moving& other);
     Moving(Moving&& other) noexcept;
