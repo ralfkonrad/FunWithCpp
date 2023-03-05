@@ -60,7 +60,8 @@ jobs:
           restore-keys: ${{ matrix.os }}-
           variant: ${{ ( (runner.os == 'Windows') && 'sccache' ) || 'ccache' }}
 
-      - uses: ./.github/actions/setup
+      - name: Setup needed software
+        uses: ./.github/actions/setup
 
       - name: Configure CMake and Build
         run: |
