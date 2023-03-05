@@ -51,21 +51,14 @@ jobs:
         include:
           - os: macos-latest
             cmake_cxx_compiler_launcher: ccache
-            setup: |
-              brew install ninja
             preconfigure-action:
 
           - os: ubuntu-latest
             cmake_cxx_compiler_launcher: ccache
-            setup: |
-              sudo apt update
-              sudo apt install ninja-build
             preconfigure-action:
 
           - os: windows-2022
             cmake_cxx_compiler_launcher: sccache
-            setup: |
-              choco install -y ninja
             preconfigure-action: |
               & "C:\Program Files\Microsoft Visual Studio\2022\Enterprise\Common7\Tools\Launch-VsDevShell.ps1" -Arch amd64
 
@@ -82,7 +75,18 @@ jobs:
           variant: ${{ matrix.CMAKE_CXX_COMPILER_LAUNCHER }}
 
       - name: Setup
-        run: ${{ matrix.setup }}
+        run: |
+          if [ "$RUNNER_OS" == "Linux" ]; then
+            sudo apt update
+            sudo apt install ninja-build
+          elif [ "$RUNNER_OS" == "macOS" ]; then
+            brew install ninja
+          elif [ "$RUNNER_OS" == "Windows" ]; then
+            choco install -y ninja
+          else
+            echo "$RUNNER_OS not supported"
+            exit 1
+          fi
 
       - name: Configure CMake and Build
         run: |
