@@ -1,8 +1,15 @@
-name: 'Setup'
-description: 'Setup  of the needed software'
+name: Setup
+description: Setup of the needed software
 runs:
-  using: "composite"
+  using: composite
   steps:
+    - name: Setup CCache
+      uses: hendrikmuhs/ccache-action@v1.2
+      with:
+        key: ${{ matrix.os }}-${{ github.job }}-${{ matrix.cxx-standard }}
+        restore-keys: ${{ matrix.os }}-
+        variant: ${{ ( (runner.os == 'Windows') && 'sccache' ) || 'ccache' }}
+
     - name: Setup Linux
       if: runner.os == 'Linux'
       shell: bash

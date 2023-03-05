@@ -53,13 +53,6 @@ jobs:
     steps:
       - uses: actions/checkout@v3
 
-      - name: Setup CCache
-        uses: hendrikmuhs/ccache-action@v1.2
-        with:
-          key: ${{ matrix.os }}-${{ github.job }}-${{ matrix.cxx-standard }}
-          restore-keys: ${{ matrix.os }}-
-          variant: ${{ ( (runner.os == 'Windows') && 'sccache' ) || 'ccache' }}
-
       - name: Setup needed software
         uses: ./.github/actions/setup
 
