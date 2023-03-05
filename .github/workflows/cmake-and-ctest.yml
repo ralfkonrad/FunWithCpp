@@ -74,19 +74,21 @@ jobs:
           restore-keys: ${{ matrix.os }}-
           variant: ${{ matrix.CMAKE_CXX_COMPILER_LAUNCHER }}
 
-      - name: Setup
+      - name: Setup Linux
+        if: runner.os == 'Linux'
         run: |
-          if [ "$RUNNER_OS" == "Linux" ]; then
-            sudo apt update
-            sudo apt install ninja-build
-          elif [ "$RUNNER_OS" == "macOS" ]; then
-            brew install ninja
-          elif [ "$RUNNER_OS" == "Windows" ]; then
-            choco install -y ninja
-          else
-            echo "$RUNNER_OS not supported"
-            exit 1
-          fi
+          sudo apt update
+          sudo apt install ninja-build
+
+      - name: Setup macOS
+        if: runner.os == 'macOS'
+        run: |
+          brew install ninja
+
+      - name: Setup Windows
+        if: runner.os == 'Windows'
+        run: |
+          choco install -y ninja
 
       - name: Configure CMake and Build
         run: |
