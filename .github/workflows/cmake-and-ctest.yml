@@ -51,16 +51,12 @@ jobs:
         include:
           - os: macos-latest
             cmake_cxx_compiler_launcher: ccache
-            preconfigure-action:
 
           - os: ubuntu-latest
             cmake_cxx_compiler_launcher: ccache
-            preconfigure-action:
 
           - os: windows-2022
             cmake_cxx_compiler_launcher: sccache
-            preconfigure-action: |
-              & "C:\Program Files\Microsoft Visual Studio\2022\Enterprise\Common7\Tools\Launch-VsDevShell.ps1" -Arch amd64
 
     runs-on: ${{ matrix.os }}
 
@@ -90,9 +86,14 @@ jobs:
         run: |
           choco install -y ninja
 
+      - name: Set up Visual Studio shell on Windows
+        uses: egor-tensin/vs-shell@v2
+        if: runner.os == 'Windows'
+        with:
+          arch: x64
+
       - name: Configure CMake and Build
         run: |
-          ${{ matrix.preconfigure-action }}
           cmake --version
           cmake --preset ${{ matrix.preset }} -DCMAKE_CXX_STANDARD=${{ matrix.cxx-standard }} -DCMAKE_CXX_COMPILER_LAUNCHER=${{ matrix.cmake_cxx_compiler_launcher }}
           cmake --build --preset ${{ matrix.preset }} -v
