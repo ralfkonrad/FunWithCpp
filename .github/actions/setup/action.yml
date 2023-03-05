@@ -1,0 +1,29 @@
+name: 'Setup'
+description: 'Setup  of the needed software'
+runs:
+  using: "composite"
+  steps:
+    - name: Setup Linux
+      if: runner.os == 'Linux'
+      shell: bash
+      run: |
+        sudo apt update
+        sudo apt install ninja-build
+
+    - name: Setup macOS
+      if: runner.os == 'macOS'
+      shell: bash
+      run: |
+        brew install ninja
+
+    - name: Setup Windows
+      if: runner.os == 'Windows'
+      shell: pwsh
+      run: |
+        choco install -y ninja
+
+    - name: Set up Visual Studio shell on Windows
+      uses: egor-tensin/vs-shell@v2
+      if: runner.os == 'Windows'
+      with:
+        arch: x64
