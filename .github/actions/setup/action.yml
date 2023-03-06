@@ -20,9 +20,9 @@ runs:
     - name: Setup CCache
       uses: hendrikmuhs/ccache-action@v1.2
       with:
-        key: ${{ os }}-${{ github.job }}-${{ cxx-standard }}
-        restore-keys: ${{ os }}-
-        variant: ${{ ccache-variant }}
+        key: ${{ inputs.os }}-${{ github.job }}-${{ inputs.cxx-standard }}
+        restore-keys: ${{ inputs.os }}-
+        variant: ${{ inputs.ccache-variant }}
 
     - name: Setup Linux
       if: runner.os == 'Linux'
