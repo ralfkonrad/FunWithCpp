@@ -1,5 +1,7 @@
-name: cmake-and-ctest
-description: Builds the project and tests it using cmake and ctest
+name:
+  cmake-and-ctest
+description:
+  Builds the project and tests it using cmake and ctest
 
 inputs:
   os:
@@ -14,6 +16,11 @@ inputs:
     description: The compiler to use.
     required: true
 
+  compiler-version:
+    description: The compiler version to use.
+    required: false
+    default: ""
+
 runs:
   using: composite
   steps:
@@ -21,22 +28,26 @@ runs:
       id: setup
       uses: ./.github/actions/setup
       with:
-        os: ${{ inputs.os }}
-        cxx-standard: $${{ inputs.cxx-standard }}
+        os:           ${{ inputs.os }}
+        cxx-standard: ${{ inputs.cxx-standard }}
 
-    - id: determine-preset
-      shell: bash
-      run: |
-        echo "preset=${{ ( (runner.os == 'Windows') && 'windows-mscv' ) || format('{0}-{1}', runner.os, inputs.compiler ) }}-release-ninja" | tr "[:upper:]" "[:lower:]" >> $GITHUB_OUTPUT
+    - name: Get C and CXX compiler
+      id: cxx-compiler
+      uses: ./.github/actions/get-cxx-compiler
+      with:
+        compiler:         ${{ matrix.compiler }}
+        compiler-version: ${{ matrix.compiler-version }}
 
     - name: Configure CMake and Build
       env:
-        preset: ${{ steps.determine-preset.outputs.preset }}
-        ccache: ${{ steps.setup.outputs.ccache-variant }}
+        ccache:       ${{ steps.setup.outputs.ccache-variant }}
+        c-compiler:   ${{ steps.cxx-compiler.outputs.c-compiler }}
+        cxx-compiler: ${{ steps.cxx-compiler.outputs.cxx-compiler }}
       shell: bash
+      working-directory:
       run: |
         cmake --version
-        cmake --preset $preset -DCMAKE_CXX_STANDARD=${{ inputs.cxx-standard }} -DCMAKE_CXX_COMPILER_LAUNCHER=$ccache
+        cmake -S . -B ./build  -DCMAKE_CXX_STANDARD=${{ inputs.cxx-standard }} -DCMAKE_CXX_COMPILER_LAUNCHER=$ccache
         cmake --build --preset $preset -v
 
     - name: Test

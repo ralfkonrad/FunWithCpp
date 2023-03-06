@@ -5,14 +5,15 @@ on:
   pull_request: { }
 
 jobs:
-  build-and-test:
+  ubuntu-22.04-clang:
     strategy:
       fail-fast: false
 
       matrix:
-        os:           [ ubuntu-latest ]
-        cxx-standard: [ 17, 20 ]
-        compiler:     [ clang, gcc ]
+        os:                 [ ubuntu-22.04 ]
+        cxx-standard:       [ 17, 20 ]
+        compiler:           [ clang ]
+        compiler-version :  [ 12, 13, 14 ]
 
     runs-on: ${{ matrix.os }}
 
@@ -22,6 +23,7 @@ jobs:
       - name: Build and Test
         uses: ./.github/actions/cmake-and-ctest
         with:
-          os: ${{ matrix.os }}
-          cxx-standard: ${{ matrix.cxx-standard }}
-          compiler: ${{ matrix.compiler }}
+          os:               ${{ matrix.os }}
+          cxx-standard:     ${{ matrix.cxx-standard }}
+          compiler:         ${{ matrix.compiler }}
+          compiler-version: ${{ matrix.compiler-version }}

@@ -1,0 +1,30 @@
+name:
+  set-cmake_cxx_compiler-variable
+description:
+  Sets the CMAKE_C_COMPILER and CMAKE_CXX_COMPILER environment variables.
+
+inputs:
+  compiler:
+    description: The compiler to use.
+    required: true
+
+  compiler-version:
+    description: The compiler version to use.
+    required: true
+
+outputs:
+  c-compiler:
+    description: The c compiler
+    value: clang14
+
+  cxx-compiler:
+    description: The c++ compiler
+    value: clang++14
+
+runs:
+  using: composite
+  steps:
+    - name: noname
+      shell: bash
+      run: echo noname
+
