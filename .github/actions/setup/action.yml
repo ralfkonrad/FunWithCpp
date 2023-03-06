@@ -13,7 +13,7 @@ inputs:
 outputs:
   ccache-variant:
     description: The ccache variant to use with the ccache-action
-    value: ${{ steps.determine-ccache-variant.ccache-variant }}
+    value: ${{ steps.determine-ccache-variant.outputs.ccache-variant }}
 
 runs:
   using: composite
@@ -28,7 +28,7 @@ runs:
       with:
         key: ${{ inputs.os }}-${{ github.job }}-${{ inputs.cxx-standard }}
         restore-keys: ${{ inputs.os }}-
-        variant: ${{ steps.determine-ccache-variant.ccache-variant }}
+        variant: ${{ steps.determine-ccache-variant.outputs.ccache-variant }}
 
     - name: Setup Linux
       if: runner.os == 'Linux'
