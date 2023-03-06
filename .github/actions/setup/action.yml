@@ -28,7 +28,7 @@ runs:
       with:
         key: ${{ inputs.os }}-${{ github.job }}-${{ inputs.cxx-standard }}
         restore-keys: ${{ inputs.os }}-
-        variant: ${{ outputs.ccache-variant }}
+        variant: ${{ steps.determine-ccache-variant.ccache-variant }}
 
     - name: Setup Linux
       if: runner.os == 'Linux'
