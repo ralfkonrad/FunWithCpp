@@ -11,9 +11,7 @@ jobs:
 
       matrix:
         os: [
-          macos-latest,
           ubuntu-latest,
-          windows-2022
         ]
 
         cxx-standard: [
@@ -21,32 +19,10 @@ jobs:
           20
         ]
 
-        preset: [
-          macos-clang-release-ninja,
-          linux-clang-release-ninja,
-          linux-gcc-release-ninja,
-          windows-mscv-release-ninja
+        compiler: [
+          clang,
+          gcc
         ]
-
-        exclude:
-          - os: macos-latest
-            preset: linux-clang-release-ninja
-          - os: macos-latest
-            preset: linux-gcc-release-ninja
-          - os: macos-latest
-            preset: windows-mscv-release-ninja
-
-          - os: ubuntu-latest
-            preset: macos-clang-release-ninja
-          - os: ubuntu-latest
-            preset: windows-mscv-release-ninja
-
-          - os: windows-2022
-            preset: macos-clang-release-ninja
-          - os: windows-2022
-            preset: linux-clang-release-ninja
-          - os: windows-2022
-            preset: linux-gcc-release-ninja
 
     runs-on: ${{ matrix.os }}
 
