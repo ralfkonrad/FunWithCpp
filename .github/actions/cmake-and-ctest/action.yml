@@ -32,11 +32,11 @@ runs:
     - name: Configure CMake and Build
       env:
         preset: ${{ steps.determine-preset.outputs.preset }}
-        ccache-variant: ${{ steps.setup.outputs.ccache-variant }}
+        ccache: ${{ steps.setup.outputs.ccache-variant }}
       shell: bash
       run: |
         cmake --version
-        cmake --preset $preset -DCMAKE_CXX_STANDARD=${{ inputs.cxx-standard }} -DCMAKE_CXX_COMPILER_LAUNCHER=${{ ccache-variant }}
+        cmake --preset $preset -DCMAKE_CXX_STANDARD=${{ inputs.cxx-standard }} -DCMAKE_CXX_COMPILER_LAUNCHER=$ccache
         cmake --build --preset $preset -v
 
     - name: Test
