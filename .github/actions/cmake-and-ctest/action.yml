@@ -36,7 +36,7 @@ runs:
       shell: bash
       run: |
         cmake --version
-        cmake --preset $preset -DCMAKE_CXX_STANDARD=${{ inputs.cxx-standard }} -DCMAKE_CXX_COMPILER_LAUNCHER=$ccache-variant
+        cmake --preset $preset -DCMAKE_CXX_STANDARD=${{ inputs.cxx-standard }} -DCMAKE_CXX_COMPILER_LAUNCHER=${{ ccache-variant }}
         cmake --build --preset $preset -v
 
     - name: Test
