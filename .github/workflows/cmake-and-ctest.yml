@@ -24,18 +24,14 @@ jobs:
         include:
           - os: macos-latest
             preset: macos-clang-release-ninja
-            ccache-variant: ccache
 
           - os: ubuntu-latest
             preset: linux-clang-release-ninja
-            ccache-variant: ccache
           - os: ubuntu-latest
             preset: linux-gcc-release-ninja
-            ccache-variant: ccache
 
           - os: windows-2022
             preset: windows-mscv-release-ninja
-            ccache-variant: sccache
 
     runs-on: ${{ matrix.os }}
 
@@ -43,16 +39,16 @@ jobs:
       - uses: actions/checkout@v3
 
       - name: Setup needed software
+        id: setup
         uses: ./.github/actions/setup
         with:
           os: ${{ matrix.os }}
           cxx-standard: $${{ matrix.cxx-standard }}
-          ccache-variant: ${{ matrix.ccache-variant }}
 
       - name: Configure CMake and Build
         run: |
           cmake --version
-          cmake --preset ${{ matrix.preset }} -DCMAKE_CXX_STANDARD=${{ matrix.cxx-standard }} -DCMAKE_CXX_COMPILER_LAUNCHER=${{ matrix.ccache-variant }}
+          cmake --preset ${{ matrix.preset }} -DCMAKE_CXX_STANDARD=${{ matrix.cxx-standard }} -DCMAKE_CXX_COMPILER_LAUNCHER=${{ steps.setup.outputs.ccache-variant }}
           cmake --build --preset ${{ matrix.preset }} -v
 
       - name: Test

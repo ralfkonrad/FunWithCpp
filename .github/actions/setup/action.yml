@@ -10,19 +10,25 @@ inputs:
     description: The c++ standard used with the run.
     required: true
 
+outputs:
   ccache-variant:
     description: The ccache variant to use with the ccache-action
-    required: true
+    value: ${{ steps.determine-ccache-variant.ccache-variant }}
 
 runs:
   using: composite
   steps:
+    - id: determine-ccache-variant
+      shell: bash
+      run: |
+        echo "ccache-variant=${{ ( (runner.os == 'Windows') && 'sccache' ) || 'ccache' }}"  >> $GITHUB_OUTPUT
+
     - name: Setup CCache
       uses: hendrikmuhs/ccache-action@v1.2
       with:
         key: ${{ inputs.os }}-${{ github.job }}-${{ inputs.cxx-standard }}
         restore-keys: ${{ inputs.os }}-
-        variant: ${{ inputs.ccache-variant }}
+        variant: ${{ outputs.ccache-variant }}
 
     - name: Setup Linux
       if: runner.os == 'Linux'
