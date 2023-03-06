@@ -21,32 +21,21 @@ jobs:
           20
         ]
 
-        preset: [
-          linux-clang-release-ninja,
-          linux-gcc-release-ninja,
-          macos-clang-release-ninja,
-          windows-mscv-release-ninja
-        ]
-
-        exclude:
+        include:
           - os: macos-latest
-            preset: linux-clang-release-ninja
-          - os: macos-latest
-            preset: linux-gcc-release-ninja
-          - os: macos-latest
-            preset: windows-mscv-release-ninja
+            preset: macos-clang-release-ninja
+            ccache-variant: ccache
 
           - os: ubuntu-latest
-            preset: macos-clang-release-ninja
+            preset: linux-clang-release-ninja
+            ccache-variant: ccache
           - os: ubuntu-latest
-            preset: windows-mscv-release-ninja
+            preset: linux-gcc-release-ninja
+            ccache-variant: ccache
 
           - os: windows-2022
-            preset: linux-clang-release-ninja
-          - os: windows-2022
-            preset: linux-gcc-release-ninja
-          - os: windows-2022
-            preset: macos-clang-release-ninja
+            preset: windows-mscv-release-ninja
+            ccache-variant: sccache
 
     runs-on: ${{ matrix.os }}
 
@@ -55,11 +44,15 @@ jobs:
 
       - name: Setup needed software
         uses: ./.github/actions/setup
+        with:
+          - os: ${{ matrix.os }}
+          - cxx-standard: $${{ matrix.cxx-standard }}
+          - ccache-variant: ${{ matrix.ccache-variant }}
 
       - name: Configure CMake and Build
         run: |
           cmake --version
-          cmake --preset ${{ matrix.preset }} -DCMAKE_CXX_STANDARD=${{ matrix.cxx-standard }}
+          cmake --preset ${{ matrix.preset }} -DCMAKE_CXX_STANDARD=${{ matrix.cxx-standard }} -DCMAKE_CXX_COMPILER_LAUNCHER=${{ matrix.ccache-variant }}
           cmake --build --preset ${{ matrix.preset }} -v
 
       - name: Test

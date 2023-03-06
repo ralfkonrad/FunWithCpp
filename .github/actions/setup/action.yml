@@ -1,14 +1,28 @@
 name: Setup
 description: Setup of the needed software
+
+inputs:
+  os:
+    description: The os for the run.
+    required: true
+
+  cxx-standard:
+    description: The c++ standard used with the run.
+    required: true
+
+  ccache-variant:
+    description: The ccache variant to use with the ccache-action
+    required: true
+
 runs:
   using: composite
   steps:
     - name: Setup CCache
       uses: hendrikmuhs/ccache-action@v1.2
       with:
-        key: ${{ matrix.os }}-${{ github.job }}-${{ matrix.cxx-standard }}
-        restore-keys: ${{ matrix.os }}-
-        variant: ${{ ( (runner.os == 'Windows') && 'sccache' ) || 'ccache' }}
+        key: ${{ os }}-${{ github.job }}-${{ cxx-standard }}
+        restore-keys: ${{ os }}-
+        variant: ${{ ccache-variant }}
 
     - name: Setup Linux
       if: runner.os == 'Linux'
