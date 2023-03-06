@@ -10,36 +10,16 @@ jobs:
       fail-fast: false
 
       matrix:
-        os: [
-          ubuntu-latest,
-        ]
-
-        cxx-standard: [
-          17,
-          20
-        ]
-
-        compiler: [
-          clang,
-          gcc
-        ]
+        os:           [ ubuntu-latest ]
+        cxx-standard: [ 17, 20 ]
+        compiler:     [ clang, gcc ]
 
     runs-on: ${{ matrix.os }}
 
     steps:
-      - uses: actions/checkout@v3
-
-      - name: Setup needed software
-        id: setup
-        uses: ./.github/actions/setup
-        with:
-          os: ${{ matrix.os }}
-          cxx-standard: $${{ matrix.cxx-standard }}
-
       - name: Build and Test
         uses: ./.github/actions/cmake-and-ctest
         with:
           os: ${{ matrix.os }}
           cxx-standard: ${{ matrix.cxx-standard }}
           compiler: ${{ matrix.compiler }}
-          ccache-variant: ${{ steps.setup.outputs.ccache-variant }}

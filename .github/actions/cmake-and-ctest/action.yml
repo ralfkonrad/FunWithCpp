@@ -14,26 +14,31 @@ inputs:
     description: The compiler to use.
     required: true
 
-  ccache-variant:
-    description: The ccache variant to use with the ccache-action
-    required: true
-
 runs:
   using: composite
   steps:
+    - uses: actions/checkout@v3
+
+    - name: Setup needed software
+      id: setup
+      uses: ./.github/actions/setup
+      with:
+        os: ${{ inputs.os }}
+        cxx-standard: $${{ inputs.cxx-standard }}
+
     - id: determine-preset
       shell: bash
       run: |
         echo "preset=${{ ( (runner.os == 'Windows') && 'windows-mscv' ) || format('{0}-{1}', runner.os, inputs.compiler ) }}-release-ninja" | tr "[:upper:]" "[:lower:]" >> $GITHUB_OUTPUT
-        more $GITHUB_OUTPUT
 
     - name: Configure CMake and Build
       env:
         preset: ${{ steps.determine-preset.outputs.preset }}
+        ccache-variant: ${{ steps.setup.outputs.ccache-variant }}
       shell: bash
       run: |
         cmake --version
-        cmake --preset $preset -DCMAKE_CXX_STANDARD=${{ inputs.cxx-standard }} -DCMAKE_CXX_COMPILER_LAUNCHER=${{ inputs.ccache-variant }}
+        cmake --preset $preset -DCMAKE_CXX_STANDARD=${{ inputs.cxx-standard }} -DCMAKE_CXX_COMPILER_LAUNCHER=$ccache-variant
         cmake --build --preset $preset -v
 
     - name: Test
