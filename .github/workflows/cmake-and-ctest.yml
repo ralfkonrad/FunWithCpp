@@ -22,16 +22,16 @@ jobs:
         ]
 
         include:
-          - os: macos-latest
-            preset: macos-clang-release-ninja
+          - preset: macos-clang-release-ninja
+            os: macos-latest
 
-          - os: ubuntu-latest
-            preset: linux-clang-release-ninja
-          - os: ubuntu-latest
-            preset: linux-gcc-release-ninja
+          - preset: linux-clang-release-ninja
+            os: ubuntu-latest
+          - preset: linux-gcc-release-ninja
+            os: ubuntu-latest
 
-          - os: windows-2022
-            preset: windows-mscv-release-ninja
+          - preset: windows-mscv-release-ninja
+            os: windows-2022
 
     runs-on: ${{ matrix.os }}
 
