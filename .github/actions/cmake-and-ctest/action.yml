@@ -24,7 +24,7 @@ runs:
     - id: determine-preset
       shell: bash
       run: |
-        echo "preset=${{ ( (runner.os == 'Windows') && 'windows-mscv' ) || format('{0}-{1}', runner.os, inputs.compiler ) }}-release-ninja" >> $GITHUB_OUTPUT
+        echo "preset=${{ ( (runner.os == 'Windows') && 'windows-mscv' ) || format('{0}-{1}', runner.os, inputs.compiler ) }}-release-ninja" | tr "[:upper:]" "[:lower:]" >> $GITHUB_OUTPUT
         more $GITHUB_OUTPUT
 
     - name: Configure CMake and Build
