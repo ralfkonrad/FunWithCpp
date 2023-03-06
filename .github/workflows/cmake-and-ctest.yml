@@ -45,9 +45,9 @@ jobs:
       - name: Setup needed software
         uses: ./.github/actions/setup
         with:
-          - os: ${{ matrix.os }}
-          - cxx-standard: $${{ matrix.cxx-standard }}
-          - ccache-variant: ${{ matrix.ccache-variant }}
+          os: ${{ matrix.os }}
+          cxx-standard: $${{ matrix.cxx-standard }}
+          ccache-variant: ${{ matrix.ccache-variant }}
 
       - name: Configure CMake and Build
         run: |
