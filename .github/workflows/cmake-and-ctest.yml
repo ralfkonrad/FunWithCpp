@@ -5,7 +5,7 @@ on:
   pull_request: { }
 
 jobs:
-  ubuntu-22.04-clang:
+  ubuntu-22_04-clang:
     strategy:
       fail-fast: false
 
