@@ -21,17 +21,19 @@ jobs:
           20
         ]
 
+        preset: []
+
         include:
-          - preset: macos-clang-release-ninja
-            os: macos-latest
+          - os: macos-latest
+            preset: macos-clang-release-ninja
 
-          - preset: linux-clang-release-ninja
-            os: ubuntu-latest
-          - preset: linux-gcc-release-ninja
-            os: ubuntu-latest
+          - os: ubuntu-latest
+            preset: linux-clang-release-ninja
+          - os: ubuntu-latest
+            preset: linux-gcc-release-ninja
 
-          - preset: windows-mscv-release-ninja
-            os: windows-2022
+          - os: windows-2022
+            preset: windows-mscv-release-ninja
 
     runs-on: ${{ matrix.os }}
 
