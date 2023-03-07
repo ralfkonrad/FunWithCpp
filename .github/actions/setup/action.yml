@@ -18,7 +18,8 @@ inputs:
 
   compiler-version:
     description: The compiler version to use.
-    required: true
+    required: false
+    default: ""
 
 outputs:
   ccache-variant:

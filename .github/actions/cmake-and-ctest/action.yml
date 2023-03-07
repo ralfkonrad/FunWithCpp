@@ -35,8 +35,10 @@ runs:
       id: setup
       uses: ./.github/actions/setup
       with:
-        os:           ${{ inputs.os }}
-        cxx-standard: ${{ inputs.cxx-standard }}
+        os:                 ${{ inputs.os }}
+        cxx-standard:       ${{ inputs.cxx-standard }}
+        compiler:           ${{ inputs.compiler }}
+        compiler-version:   ${{ inputs.compiler-version }}
 
     - name: Configure CMake and Build
       env:

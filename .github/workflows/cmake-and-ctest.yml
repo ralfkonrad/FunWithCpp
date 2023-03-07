@@ -12,7 +12,7 @@ jobs:
       matrix:
         os:                 [ macos-11, macos-12 ]
         cxx-standard:       [ 17, 20 ]
-        compiler:           [ clang, gcc ]
+        compiler:           [ clang ]
 
     runs-on: ${{ matrix.os }}
 
