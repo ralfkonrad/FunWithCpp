@@ -10,7 +10,7 @@ inputs:
 
   compiler-version:
     description: The compiler version to use.
-    required: true
+    required: false
 
 outputs:
   cc:
@@ -31,5 +31,15 @@ runs:
         then
           echo "cc=clang-${{ inputs.compiler-version }}" >> $GITHUB_OUTPUT
           echo "cxx=clang++-${{ inputs.compiler-version }}" >> $GITHUB_OUTPUT
-        elif [] 
+        elif [ "${{ inputs.compiler }}" = "gcc" ]
+        then
+          echo "cc=gcc-${{ inputs.compiler-version }}" >> $GITHUB_OUTPUT
+          echo "cxx=g++-${{ inputs.compiler-version }}" >> $GITHUB_OUTPUT
+        elif [ "${{ inputs.compiler }}" = "msvc" ]
+          echo "cc=cl" >> $GITHUB_OUTPUT
+          echo "cxx=cl" >> $GITHUB_OUTPUT
+        else
+          echo Unknown compiler given: '${{ inputs.compiler }}'
+          exit 1
+        fi
 
