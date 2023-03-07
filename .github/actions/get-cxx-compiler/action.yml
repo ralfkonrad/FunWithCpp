@@ -36,6 +36,7 @@ runs:
           echo "cc=gcc-${{ inputs.compiler-version }}" >> $GITHUB_OUTPUT
           echo "cxx=g++-${{ inputs.compiler-version }}" >> $GITHUB_OUTPUT
         elif [ "${{ inputs.compiler }}" = "msvc" ]
+        then
           echo "cc=cl" >> $GITHUB_OUTPUT
           echo "cxx=cl" >> $GITHUB_OUTPUT
         else
