@@ -48,9 +48,10 @@ runs:
         CMAKE_CXX_COMPILER_LAUNCHER:    ${{ steps.setup.outputs.ccache-variant }}
       shell: bash
       run: |
+        env | sort
         cmake --version
         cmake -S . -B ./build -G Ninja
-        cmake --build ./build
+        cmake --build ./build -v
 
     - name: Test
       env:
@@ -58,4 +59,4 @@ runs:
       working-directory: ./build
       shell: bash
       run: |
-        ctest -C Release
+        ctest -C Release --extra-verbose
