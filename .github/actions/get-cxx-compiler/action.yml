@@ -24,27 +24,22 @@ outputs:
 runs:
   using: composite
   steps:
-    - name: determine-compiler-variable
+    - id: determine-compiler-variable
       shell: bash
       run: |
         if [ "${{ inputs.compiler }}" = "clang" ]
         then
-          echo using clang
           echo "cc=clang-${{ inputs.compiler-version }}"      >> $GITHUB_OUTPUT
           echo "cxx=clang++-${{ inputs.compiler-version }}"   >> $GITHUB_OUTPUT
         elif [ "${{ inputs.compiler }}" = "gcc" ]
         then
-          echo using gcc
           echo "cc=gcc-${{ inputs.compiler-version }}"        >> $GITHUB_OUTPUT
           echo "cxx=g++-${{ inputs.compiler-version }}"       >> $GITHUB_OUTPUT
         elif [ "${{ inputs.compiler }}" = "msvc" ]
         then
-          echo using cl
           echo "cc=cl"                                        >> $GITHUB_OUTPUT
           echo "cxx=cl"                                       >> $GITHUB_OUTPUT
         else
           echo Unknown compiler given: '${{ inputs.compiler }}'
           exit 1
         fi
-        echo $GITHUB_OUTPUT
-
