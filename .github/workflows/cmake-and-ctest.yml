@@ -27,6 +27,29 @@ jobs:
           compiler:         ${{ matrix.compiler }}
           compiler-version: ${{ matrix.compiler-version }}
 
+  ubuntu-20_04-clang:
+    strategy:
+      fail-fast: false
+
+      matrix:
+        os:                 [ ubuntu-20.04 ]
+        cxx-standard:       [ 17, 20 ]
+        compiler:           [ clang ]
+        compiler-version :  [ 10, 11, 12 ]
+
+    runs-on: ${{ matrix.os }}
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Build and Test
+        uses: ./.github/actions/cmake-and-ctest
+        with:
+          os:               ${{ matrix.os }}
+          cxx-standard:     ${{ matrix.cxx-standard }}
+          compiler:         ${{ matrix.compiler }}
+          compiler-version: ${{ matrix.compiler-version }}
+
   ubuntu-22_04-clang:
     strategy:
       fail-fast: false
@@ -36,6 +59,29 @@ jobs:
         cxx-standard:       [ 17, 20 ]
         compiler:           [ clang ]
         compiler-version :  [ 12, 13, 14 ]
+
+    runs-on: ${{ matrix.os }}
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Build and Test
+        uses: ./.github/actions/cmake-and-ctest
+        with:
+          os:               ${{ matrix.os }}
+          cxx-standard:     ${{ matrix.cxx-standard }}
+          compiler:         ${{ matrix.compiler }}
+          compiler-version: ${{ matrix.compiler-version }}
+
+  ubuntu-20_04-gcc:
+    strategy:
+      fail-fast: false
+
+      matrix:
+        os:                 [ ubuntu-20.04 ]
+        cxx-standard:       [ 17, 20 ]
+        compiler:           [ gcc ]
+        compiler-version :  [ 9, 10 ]
 
     runs-on: ${{ matrix.os }}
 
