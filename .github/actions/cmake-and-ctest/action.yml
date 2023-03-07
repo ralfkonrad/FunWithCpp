@@ -47,12 +47,13 @@ runs:
       working-directory:
       run: |
         cmake --version
-        cmake -S . -B ./build  -DCMAKE_CXX_STANDARD=${{ inputs.cxx-standard }} -DCMAKE_CXX_COMPILER_LAUNCHER=$ccache
-        cmake --build --preset $preset -v
+        cmake -S . -B ./build -DCMAKE_C_COMPILER=${{ c-compiler }} -DCMAKE_CXX_COMPILER=${{ cxx-compiler }} -DCMAKE_CXX_STANDARD=${{ inputs.cxx-standard }} -DCMAKE_BUILD_TYPE=Release -DCMAKE_CXX_COMPILER_LAUNCHER=$ccache
+        cmake --build ./build
 
     - name: Test
       env:
         preset: ${{ steps.determine-preset.outputs.preset }}
+      working-directory: ./build
       shell: bash
       run: |
-        ctest --preset $preset
+        ctest -C Release
