@@ -47,7 +47,7 @@ runs:
       working-directory:
       run: |
         cmake --version
-        cmake -S . -B ./build -DCMAKE_C_COMPILER=${{ c-compiler }} -DCMAKE_CXX_COMPILER=${{ cxx-compiler }} -DCMAKE_CXX_STANDARD=${{ inputs.cxx-standard }} -DCMAKE_BUILD_TYPE=Release -DCMAKE_CXX_COMPILER_LAUNCHER=$ccache
+        cmake -S . -B ./build -DCMAKE_C_COMPILER=${{ env.c-compiler }} -DCMAKE_CXX_COMPILER=${{ env.cxx-compiler }} -DCMAKE_CXX_STANDARD=${{ inputs.cxx-standard }} -DCMAKE_BUILD_TYPE=Release -DCMAKE_CXX_COMPILER_LAUNCHER=$ccache
         cmake --build ./build
 
     - name: Test
