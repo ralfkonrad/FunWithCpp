@@ -40,23 +40,22 @@ runs:
 
     - name: Configure CMake and Build
       env:
-        RKE_COMPILE_WARNING_AS_ERROR:   ON
-        CMAKE_C_COMPILER:               ${{ steps.cxx-compiler.outputs.c-compiler }}
-        CMAKE_CXX_COMPILER:             ${{ steps.cxx-compiler.outputs.cxx-compiler }}
-        CMAKE_CXX_STANDARD:             ${{ inputs.cxx-standard }}
-        CMAKE_BUILD_TYPE:               Release
+        CC:                             ${{ steps.cxx-compiler.outputs.c-compiler }}
+        CXX:                            ${{ steps.cxx-compiler.outputs.cxx-compiler }}
+        CMAKE_GENERATOR:                Ninja
+        CMAKE_CONFIG_TYPE:              Release
         CMAKE_CXX_COMPILER_LAUNCHER:    ${{ steps.setup.outputs.ccache-variant }}
       shell: bash
       run: |
         env | sort
         cmake --version
-        cmake -S . -B ./build -G Ninja
+        cmake -S . -B ./build -DRKE_COMPILE_WARNING_AS_ERROR=ON -DCMAKE_CXX_STANDARD=${{ inputs.cxx-standard }}
         cmake --build ./build -v
 
     - name: Test
       env:
-        preset: ${{ steps.determine-preset.outputs.preset }}
+        CMAKE_CONFIG_TYPE:              Release
       working-directory: ./build
       shell: bash
       run: |
-        ctest -C Release --extra-verbose
+        ctest --extra-verbose
