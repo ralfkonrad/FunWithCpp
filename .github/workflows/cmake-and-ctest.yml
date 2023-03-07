@@ -5,6 +5,41 @@ on:
   pull_request: { }
 
 jobs:
+  macos-11-clang:
+    strategy:
+      fail-fast: false
+
+      matrix:
+        os:                 [ macos-12 ]
+        cxx-standard:       [ 17, 20 ]
+        compiler:           [ clang ]
+        compiler-version :  [ 13 ]
+
+    runs-on: ${{ matrix.os }}
+
+  macos-12-clang:
+    strategy:
+      fail-fast: false
+
+      matrix:
+        os:                 [ macos-12 ]
+        cxx-standard:       [ 17, 20 ]
+        compiler:           [ clang ]
+        compiler-version :  [ 14 ]
+
+    runs-on: ${{ matrix.os }}
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Build and Test
+        uses: ./.github/actions/cmake-and-ctest
+        with:
+          os:               ${{ matrix.os }}
+          cxx-standard:     ${{ matrix.cxx-standard }}
+          compiler:         ${{ matrix.compiler }}
+          compiler-version: ${{ matrix.compiler-version }}
+
   ubuntu-22_04-clang:
     strategy:
       fail-fast: false
@@ -50,3 +85,24 @@ jobs:
           cxx-standard:     ${{ matrix.cxx-standard }}
           compiler:         ${{ matrix.compiler }}
           compiler-version: ${{ matrix.compiler-version }}
+
+  windows-2022-msvc:
+    strategy:
+      fail-fast: false
+
+      matrix:
+        os:                 [ windows-2022 ]
+        cxx-standard:       [ 17, 20 ]
+        compiler:           [ msvc ]
+
+    runs-on: ${{ matrix.os }}
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Build and Test
+        uses: ./.github/actions/cmake-and-ctest
+        with:
+          os:               ${{ matrix.os }}
+          cxx-standard:     ${{ matrix.cxx-standard }}
+          compiler:         ${{ matrix.compiler }}
