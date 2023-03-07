@@ -1,7 +1,7 @@
 name:
-  set-cmake_cxx_compiler-variable
+  get-cmake_cxx_compiler-variable
 description:
-  Sets the CMAKE_C_COMPILER and CMAKE_CXX_COMPILER environment variables.
+  Gets the CC and CXX environment variables.
 
 inputs:
   compiler:
@@ -13,18 +13,23 @@ inputs:
     required: true
 
 outputs:
-  c-compiler:
+  cc:
     description: The c compiler
-    value: clang-14
+    value: ${{ steps.determine-compiler-variable.outputs.cc }}
 
-  cxx-compiler:
+  cxx:
     description: The c++ compiler
-    value: clang++-14
+    value: ${{ steps.determine-compiler-variable.outputs.cxx }}
 
 runs:
   using: composite
   steps:
-    - name: noname
+    - name: determine-compiler-variable
       shell: bash
-      run: echo noname
+      run: |
+        if [ "${{ inputs.compiler }}" = "clang" ]
+        then
+          echo "cc=clang-${{ inputs.compiler-version }}" >> $GITHUB_OUTPUT
+          echo "cxx=clang++-${{ inputs.compiler-version }}" >> $GITHUB_OUTPUT
+        elif [] 
 
