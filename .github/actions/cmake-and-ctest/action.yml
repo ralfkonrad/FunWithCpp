@@ -24,13 +24,6 @@ inputs:
 runs:
   using: composite
   steps:
-    - name: Setup needed software
-      id: setup
-      uses: ./.github/actions/setup
-      with:
-        os:           ${{ inputs.os }}
-        cxx-standard: ${{ inputs.cxx-standard }}
-
     - name: Get C and CXX compiler
       id: cxx-compiler
       uses: ./.github/actions/get-cxx-compiler
@@ -38,23 +31,29 @@ runs:
         compiler:         ${{ matrix.compiler }}
         compiler-version: ${{ matrix.compiler-version }}
 
+    - name: Setup needed software
+      id: setup
+      uses: ./.github/actions/setup
+      with:
+        os:           ${{ inputs.os }}
+        cxx-standard: ${{ inputs.cxx-standard }}
+
     - name: Configure CMake and Build
       env:
-        CC:                             ${{ steps.cxx-compiler.outputs.c-compiler }}
-        CXX:                            ${{ steps.cxx-compiler.outputs.cxx-compiler }}
-        CMAKE_GENERATOR:                Ninja
-        CMAKE_CONFIG_TYPE:              Release
-        CMAKE_CXX_COMPILER_LAUNCHER:    ${{ steps.setup.outputs.ccache-variant }}
+        CC:                           ${{ steps.cxx-compiler.outputs.c-compiler }}
+        CXX:                          ${{ steps.cxx-compiler.outputs.cxx-compiler }}
+        CMAKE_CONFIG_TYPE:            Release
+        CMAKE_GENERATOR:              Ninja
+        CMAKE_CXX_COMPILER_LAUNCHER:  ${{ steps.setup.outputs.ccache-variant }}
       shell: bash
       run: |
-        env | sort
         cmake --version
-        cmake -S . -B ./build -DRKE_COMPILE_WARNING_AS_ERROR=ON -DCMAKE_CXX_STANDARD=${{ inputs.cxx-standard }} -L
+        cmake -S . -B ./build -DRKE_COMPILE_WARNING_AS_ERROR=ON -DCMAKE_CXX_STANDARD=${{ inputs.cxx-standard }} -LA
         cmake --build ./build -v
 
     - name: Test
       env:
-        CMAKE_CONFIG_TYPE:              Release
+        CMAKE_CONFIG_TYPE:            Release
       working-directory: ./build
       shell: bash
       run: |
