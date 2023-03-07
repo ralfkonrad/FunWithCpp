@@ -29,8 +29,14 @@ runs:
       run: |
         if [ "${{ inputs.compiler }}" = "clang" ]
         then
-          echo "cc=clang-${{ inputs.compiler-version }}"      >> $GITHUB_OUTPUT
-          echo "cxx=clang++-${{ inputs.compiler-version }}"   >> $GITHUB_OUTPUT
+          if [ "${{ inputs.compiler-version }}" != "" ]
+          then
+            echo "cc=clang-${{ inputs.compiler-version }}"      >> $GITHUB_OUTPUT
+            echo "cxx=clang++-${{ inputs.compiler-version }}"   >> $GITHUB_OUTPUT
+          else
+            echo "cc=clang"                                     >> $GITHUB_OUTPUT
+            echo "cxx=clang++"                                  >> $GITHUB_OUTPUT
+          fi
         elif [ "${{ inputs.compiler }}" = "gcc" ]
         then
           echo "cc=gcc-${{ inputs.compiler-version }}"        >> $GITHUB_OUTPUT

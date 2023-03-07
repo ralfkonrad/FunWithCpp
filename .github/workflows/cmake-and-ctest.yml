@@ -13,7 +13,6 @@ jobs:
         os:                 [ macos-12 ]
         cxx-standard:       [ 17, 20 ]
         compiler:           [ clang ]
-        compiler-version :  [ 13 ]
 
     runs-on: ${{ matrix.os }}
 
@@ -36,7 +35,6 @@ jobs:
         os:                 [ macos-12 ]
         cxx-standard:       [ 17, 20 ]
         compiler:           [ clang ]
-        compiler-version :  [ 14 ]
 
     runs-on: ${{ matrix.os }}
 
@@ -103,6 +101,27 @@ jobs:
 
       matrix:
         os:                 [ windows-2022 ]
+        cxx-standard:       [ 17, 20 ]
+        compiler:           [ msvc ]
+
+    runs-on: ${{ matrix.os }}
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Build and Test
+        uses: ./.github/actions/cmake-and-ctest
+        with:
+          os:               ${{ matrix.os }}
+          cxx-standard:     ${{ matrix.cxx-standard }}
+          compiler:         ${{ matrix.compiler }}
+
+  windows-2019-msvc:
+    strategy:
+      fail-fast: false
+
+      matrix:
+        os:                 [ windows-2019 ]
         cxx-standard:       [ 17, 20 ]
         compiler:           [ msvc ]
 
