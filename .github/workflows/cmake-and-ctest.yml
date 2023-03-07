@@ -126,7 +126,7 @@ jobs:
       matrix:
         os:                 [ windows-2019, windows-2022 ]
         cxx-standard:       [ 17, 20 ]
-        compiler:           [ msvc ]
+        compiler:           [ clang, msvc ]
 
     runs-on: ${{ matrix.os }}
 
