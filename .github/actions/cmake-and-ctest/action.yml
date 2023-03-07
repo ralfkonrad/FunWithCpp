@@ -47,9 +47,8 @@ runs:
         CMAKE_CXX_COMPILER_LAUNCHER:  ${{ steps.setup.outputs.ccache-variant }}
       shell: bash
       run: |
-        env | sort
         cmake --version
-        cmake -S . -B ./build -DRKE_COMPILE_WARNING_AS_ERROR=ON -DCMAKE_CXX_STANDARD=${{ inputs.cxx-standard }} -LA
+        cmake -S . -B ./build -DRKE_COMPILE_WARNING_AS_ERROR=ON -DCMAKE_CXX_STANDARD=${{ inputs.cxx-standard }} -L
         cmake --build ./build -v
 
     - name: Test

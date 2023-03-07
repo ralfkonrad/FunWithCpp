@@ -27,3 +27,26 @@ jobs:
           cxx-standard:     ${{ matrix.cxx-standard }}
           compiler:         ${{ matrix.compiler }}
           compiler-version: ${{ matrix.compiler-version }}
+
+  ubuntu-22_04-gcc:
+    strategy:
+      fail-fast: false
+
+      matrix:
+        os:                 [ ubuntu-22.04 ]
+        cxx-standard:       [ 17, 20 ]
+        compiler:           [ gcc ]
+        compiler-version :  [ 9, 10, 11, 12 ]
+
+    runs-on: ${{ matrix.os }}
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Build and Test
+        uses: ./.github/actions/cmake-and-ctest
+        with:
+          os:               ${{ matrix.os }}
+          cxx-standard:     ${{ matrix.cxx-standard }}
+          compiler:         ${{ matrix.compiler }}
+          compiler-version: ${{ matrix.compiler-version }}
