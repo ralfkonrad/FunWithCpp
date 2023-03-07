@@ -15,11 +15,11 @@ inputs:
 outputs:
   c-compiler:
     description: The c compiler
-    value: clang14
+    value: clang-14
 
   cxx-compiler:
     description: The c++ compiler
-    value: clang++14
+    value: clang++-14
 
 runs:
   using: composite
