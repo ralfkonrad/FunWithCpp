@@ -4,6 +4,9 @@ on:
   push: { }
   pull_request: { }
 
+env:
+  BUILD_PATH: "${{ GITHUB_WORKSPACE }}/build"
+
 jobs:
   cmake-build-and-test:
     strategy:
@@ -56,13 +59,13 @@ jobs:
           CMAKE_CXX_COMPILER_LAUNCHER:  ${{ steps.setup.outputs.ccache-variant }}
         run: |
           cmake --version
-          cmake -S . -B ./build -DRKE_COMPILE_WARNING_AS_ERROR=ON -DCMAKE_CXX_STANDARD=${{ matrix.cxx-standard }} -L
-          cmake --build ./build -v
+          cmake -S . -B $BUILD_PATH -DRKE_COMPILE_WARNING_AS_ERROR=ON -DCMAKE_CXX_STANDARD=${{ matrix.cxx-standard }} -L
+          cmake --build $BUILD_PATH --verbose
 
-      - name: Test
+      - name: CTest
         env:
           CMAKE_CONFIG_TYPE: Release
-        working-directory: ./build
+        working-directory: $BUILD_PATH
         run: |
           ctest --version
           ctest --extra-verbose
