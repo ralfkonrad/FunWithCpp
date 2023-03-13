@@ -64,8 +64,6 @@ jobs:
           cmake --build . --verbose
 
       - name: CTest
-        env:
-          CMAKE_CONFIG_TYPE: Release
         working-directory: ${{ env.BUILD_PATH }}
         run: |
           ctest --version
