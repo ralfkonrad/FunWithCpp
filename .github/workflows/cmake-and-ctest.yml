@@ -54,4 +54,4 @@ jobs:
           cc: ${{ matrix.settings.cc }}
           cxx: ${{ matrix.settings.cxx }}
           cxx-standard: ${{ matrix.cxx-standard }}
-          ccache-variant: ${{ setup.outputs.ccache-variant }}
+          ccache-variant: ${{ steps.setup.outputs.ccache-variant }}
