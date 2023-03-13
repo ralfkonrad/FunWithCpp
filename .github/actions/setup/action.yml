@@ -12,7 +12,6 @@ inputs:
     description: The c++ compiler to use.
     required: true
 
-
 outputs:
   ccache-variant:
     description: The ccache variant to use with the ccache-action
