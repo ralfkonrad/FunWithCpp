@@ -41,30 +41,36 @@ jobs:
     runs-on: ${{ matrix.settings.os }}
 
     steps:
-      - uses:                           actions/checkout@v3
+      - uses: actions/checkout@v3
 
-      - name:                           Setup needed software
+
+      - name: Setup needed software
+
         id:                             setup
         uses:                           ./.github/actions/setup
         with:
           os:                           ${{ matrix.settings.os }}
           cxx:                          ${{ matrix.settings.cxx }}
 
+
       - name: Configure CMake and Build
+
         env:
           CC:                           ${{ matrix.settings.cc }}
           CXX:                          ${{ matrix.settings.cxx }}
           CMAKE_CONFIG_TYPE:            Release
           CMAKE_GENERATOR:              Ninja
           CMAKE_CXX_COMPILER_LAUNCHER:  ${{ steps.setup.outputs.ccache-variant }}
-        working-directory: ${{ env.BUILD_PATH }}
+        working-directory:              ${{ env.BUILD_PATH }}
         run: |
           cmake --version
           cmake .. -DRKE_COMPILE_WARNING_AS_ERROR=ON -DCMAKE_CXX_STANDARD=${{ matrix.cxx-standard }} -L
           cmake --build . --verbose
 
+
       - name: CTest
-        working-directory: ${{ env.BUILD_PATH }}
+
+        working-directory:              ${{ env.BUILD_PATH }}
         run: |
           ctest --version
           ctest --extra-verbose
