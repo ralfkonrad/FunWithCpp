@@ -35,6 +35,11 @@ runs:
           ${{ inputs.os }}
         variant: ${{ steps.determine-ccache-variant.outputs.ccache-variant }}
 
+    - name: Create build directory
+      shell: bash
+      run: |
+        mkdir $BUILD_PATH
+
     - name: Setup Linux
       if: runner.os == 'Linux'
       shell: bash
