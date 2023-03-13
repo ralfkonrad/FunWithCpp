@@ -5,7 +5,7 @@ on:
   pull_request: { }
 
 env:
-  BUILD_PATH: "${{ github.workspace }}/build"
+  BUILD_PATH: ./build
 
 jobs:
   cmake-build-and-test:
