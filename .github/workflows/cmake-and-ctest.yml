@@ -44,17 +44,16 @@ jobs:
         id: setup
         uses: ./.github/actions/setup
         with:
-          os: ${{ inputs.os }}
-          cxx: ${{ inputs.cxx }}
+          os:                           ${{ matrix.settings.os }}
+          cxx:                          ${{ matrix.settings.cxx }}
 
       - name: Configure CMake and Build
         env:
-          CC: ${{ matrix.settings.cc }}
-          CXX: ${{ matrix.settings.cxx }}
-          CMAKE_CONFIG_TYPE: Release
-          CMAKE_GENERATOR: Ninja
-          CMAKE_CXX_COMPILER_LAUNCHER: ${{ steps.setup.outputs.ccache-variant }}
-        shell: bash
+          CC:                           ${{ matrix.settings.cc }}
+          CXX:                          ${{ matrix.settings.cxx }}
+          CMAKE_CONFIG_TYPE:            Release
+          CMAKE_GENERATOR:              Ninja
+          CMAKE_CXX_COMPILER_LAUNCHER:  ${{ steps.setup.outputs.ccache-variant }}
         run: |
           cmake --version
           cmake -S . -B ./build -DRKE_COMPILE_WARNING_AS_ERROR=ON -DCMAKE_CXX_STANDARD=${{ matrix.cxx-standard }} -L
@@ -64,6 +63,5 @@ jobs:
         env:
           CMAKE_CONFIG_TYPE: Release
         working-directory: ./build
-        shell: bash
         run: |
           ctest --extra-verbose
