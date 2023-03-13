@@ -8,45 +8,35 @@ inputs:
     description: The os for the run.
     required: true
 
+  cc:
+    description: The c compiler to use.
+    required: true
+
+  cxx:
+    description: The c++ compiler to use.
+    required: true
+
   cxx-standard:
     description: The c++ standard used with the run.
     required: true
 
-  compiler:
-    description: The compiler to use.
-    required: true
-
-  compiler-version:
-    description: The compiler version to use.
-    required: false
-    default: ""
-
 runs:
   using: composite
   steps:
-    - name: Get C and CXX compiler
-      id: cxx-compiler
-      uses: ./.github/actions/get-cxx-compiler
-      with:
-        compiler:         ${{ matrix.compiler }}
-        compiler-version: ${{ matrix.compiler-version }}
-
     - name: Setup needed software
       id: setup
       uses: ./.github/actions/setup
       with:
-        os:                 ${{ inputs.os }}
-        cxx-standard:       ${{ inputs.cxx-standard }}
-        compiler:           ${{ inputs.compiler }}
-        compiler-version:   ${{ inputs.compiler-version }}
+        os: ${{ inputs.os }}
+        cxx: ${{ inputs.cxx }}
 
     - name: Configure CMake and Build
       env:
-        CC:                           ${{ steps.cxx-compiler.outputs.cc }}
-        CXX:                          ${{ steps.cxx-compiler.outputs.cxx }}
-        CMAKE_CONFIG_TYPE:            Release
-        CMAKE_GENERATOR:              Ninja
-        CMAKE_CXX_COMPILER_LAUNCHER:  ${{ steps.setup.outputs.ccache-variant }}
+        CC: ${{ inputs.cc }}
+        CXX: ${{ inputs.cxx }}
+        CMAKE_CONFIG_TYPE: Release
+        CMAKE_GENERATOR: Ninja
+        CMAKE_CXX_COMPILER_LAUNCHER: ${{ steps.setup.outputs.ccache-variant }}
       shell: bash
       run: |
         cmake --version
@@ -55,7 +45,7 @@ runs:
 
     - name: Test
       env:
-        CMAKE_CONFIG_TYPE:            Release
+        CMAKE_CONFIG_TYPE: Release
       working-directory: ./build
       shell: bash
       run: |

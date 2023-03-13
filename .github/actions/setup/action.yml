@@ -8,18 +8,10 @@ inputs:
     description: The os for the run.
     required: true
 
-  cxx-standard:
-    description: The c++ standard used with the run.
+  cxx:
+    description: The c++ compiler to use.
     required: true
 
-  compiler:
-    description: The compiler to use.
-    required: true
-
-  compiler-version:
-    description: The compiler version to use.
-    required: false
-    default: ""
 
 outputs:
   ccache-variant:
@@ -37,11 +29,11 @@ runs:
     - name: Setup CCache
       uses: hendrikmuhs/ccache-action@v1.2
       with:
-        key: ${{ inputs.os }}-${{ inputs.compiler }}${{ inputs.compiler-version }}-${{ inputs.cxx-standard }}-${{ github.job }}
+        key: ${{ inputs.os }}-${{ inputs.cxx }}--${{ github.job }}
         restore-keys: |
-          ${{ inputs.os }}-${{ inputs.compiler }}${{ inputs.compiler-version }}-${{ inputs.cxx-standard }}
-          ${{ inputs.os }}-${{ inputs.compiler }}${{ inputs.compiler-version }}-
-          ${{ inputs.os }}-
+          ${{ inputs.os }}-${{ inputs.cxx }}--${{ github.job }}
+          ${{ inputs.os }}-${{ inputs.cxx }}
+          ${{ inputs.os }}
         variant: ${{ steps.determine-ccache-variant.outputs.ccache-variant }}
 
     - name: Setup Linux
