@@ -3,6 +3,9 @@ name: Build and Test with CMake and CTest
 on:
   push: { }
   pull_request: { }
+  schedule:
+    - cron: '30 4 * * *'
+  workflow_dispatch: { }
 
 jobs:
   cmake-build-and-test:
@@ -58,7 +61,6 @@ jobs:
           CXX:                          ${{ matrix.settings.cxx }}
           CMAKE_CONFIG_TYPE:            Release
           CMAKE_CXX_COMPILER_LAUNCHER:  ${{ steps.setup.outputs.ccache-variant }}
-          CMAKE_CXX_STANDARD:           ${{ matrix.cxx-standard }}
         run: |
           cmake --version
           cmake --preset ${{ matrix.cmake-preset }} -DCMAKE_CXX_STANDARD=${{ matrix.cxx-standard }} -L
