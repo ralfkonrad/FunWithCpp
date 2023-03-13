@@ -57,13 +57,12 @@ jobs:
           CC:                           ${{ matrix.settings.cc }}
           CXX:                          ${{ matrix.settings.cxx }}
           CMAKE_CONFIG_TYPE:            Release
-          CMAKE_GENERATOR:              Ninja
           CMAKE_CXX_COMPILER_LAUNCHER:  ${{ steps.setup.outputs.ccache-variant }}
           CMAKE_CXX_STANDARD:           ${{ matrix.cxx-standard }}
         run: |
           cmake --version
           cmake --preset ${{ matrix.cmake-preset }} -DCMAKE_CXX_STANDARD=${{ matrix.cxx-standard }} -L
-          cmake --preset ${{ matrix.cmake-preset }} --build --verbose
+          cmake --build --preset ${{ matrix.cmake-preset }} --verbose
 
 
       - name: CTest
