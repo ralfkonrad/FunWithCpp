@@ -2,7 +2,8 @@ name: Build and Test with CMake and CTest
 
 on:
   push: { }
-  pull_request: { }
+  pull_request:
+    types: [opened, reopened]
   schedule:
     - cron: '30 4 * * *'
   workflow_dispatch: { }
