@@ -2,7 +2,8 @@ name: Apply clang-format fixes
 
 on:
   push: { }
-  pull_request: { }
+  pull_request:
+    types: [opened, reopened]
   workflow_dispatch: { }
 
 jobs:
@@ -21,6 +22,7 @@ jobs:
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           branch: clang-format-fixes-${{ github.ref }}
+          base: ${{ github.head_ref }}
           delete-branch: true
           commit-message: "Automated fixes by clang-format"
           title: "Automated fixes by clang-format"

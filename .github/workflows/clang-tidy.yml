@@ -2,7 +2,8 @@ name: Apply clang-tidy fixes
 
 on:
   push: { }
-  pull_request: { }
+  pull_request:
+    types: [opened, reopened]
   workflow_dispatch: { }
 
 jobs:
@@ -25,6 +26,7 @@ jobs:
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           branch: clang-tidy-fixes-${{ github.ref }}
+          base: ${{ github.head_ref }}
           delete-branch: true
           commit-message: "Automated fixes by clang-tidy"
           title: "Automated fixes by clang-tidy"
