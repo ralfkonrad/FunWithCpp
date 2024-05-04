@@ -5,4 +5,14 @@ updates:
   - package-ecosystem: "github-actions"
     directory: "/"
     schedule:
-      interval: "weekly"
+      interval: "daily"
+      time: "01:46"
+      timezone: "Europe/Berlin"
+
+  # Maintain dependencies for GitHub Actions
+  - package-ecosystem: "github-actions"
+    directory: "/.github/actions/setup"
+    schedule:
+      interval: "daily"
+      time: "01:46"
+      timezone: "Europe/Berlin"
