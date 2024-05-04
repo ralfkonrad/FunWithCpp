@@ -36,7 +36,7 @@ jobs:
             { os: windows-2022, cc: cl,       cxx: cl }
           ]
         cxx-standard: [ 17, 20 ]
-        cmake-preset: [ default ]
+        cmake-preset: [ release ]
 
     runs-on: ${{ matrix.settings.os }}
 
