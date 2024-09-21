@@ -2,19 +2,19 @@ name: Apply clang-format fixes
 
 on:
   push: { }
-  pull_request: { }
+  pull_request: {}
   workflow_dispatch: { }
 
 jobs:
   clang-format:
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-24.04
 
     steps:
       - uses: actions/checkout@v4
 
       - uses: DoozyX/clang-format-lint-action@v0.18
         with:
-          clangFormatVersion: 14
+          clangFormatVersion: 18
           inplace: True
 
       - uses: peter-evans/create-pull-request@v7
