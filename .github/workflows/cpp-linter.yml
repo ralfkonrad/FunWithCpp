@@ -9,6 +9,9 @@ on:
     - cron: '30 4 * * *'
   workflow_dispatch: { }
 
+permissions:
+  pull-requests: write
+
 jobs:
   cpp-linter:
     runs-on: ubuntu-24.04
@@ -27,3 +30,5 @@ jobs:
           tidy-checks: '' # Use .clang-tidy config file
           step-summary: true
           thread-comments: ${{ github.event_name == 'pull_request' && 'update' }}
+          tidy-review: true
+          format-review: true
