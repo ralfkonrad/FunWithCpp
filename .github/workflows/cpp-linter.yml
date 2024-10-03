@@ -1,9 +1,7 @@
 name: cpp-linter
 
 on:
-  push:
-    branches:
-      - master
+  push: { }
   pull_request: { }
   schedule:
     - cron: '30 4 * * *'
