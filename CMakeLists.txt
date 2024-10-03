@@ -15,11 +15,11 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
 
 if (NOT DEFINED CMAKE_CXX_STANDARD)
-    set(CMAKE_CXX_STANDARD 17)
+    set(CMAKE_CXX_STANDARD 20)
 endif ()
 
-if (CMAKE_CXX_STANDARD LESS 17)
-    message(FATAL_ERROR "Please specify CMAKE_CXX_STANDARD of 17 or higher")
+if (CMAKE_CXX_STANDARD LESS 20)
+    message(FATAL_ERROR "Please specify CMAKE_CXX_STANDARD of 20 or higher")
 endif ()
 
 if (MSVC)
