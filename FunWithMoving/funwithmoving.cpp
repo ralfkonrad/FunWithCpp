@@ -37,7 +37,7 @@ namespace rke {
   Moving::Moving(int i) : i_(i), str_(std::to_string(i) + "_constructing") {}
 
   Moving::~Moving() {
-    count_--;
+    count_-- ;
     std::cout << "               Deleting " << (*this) << std::endl;
   }
 
