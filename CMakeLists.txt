@@ -37,6 +37,7 @@ if (RKE_USE_CLANG_TIDY)
             -fix;)
 endif ()
 
+add_subdirectory(FunWithConceptsAndRequires)
 add_subdirectory(FunWithMoving)
 
 enable_testing()
