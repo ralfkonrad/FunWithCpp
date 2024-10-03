@@ -24,7 +24,7 @@ namespace rke {
 
    private:
     int i_;
-    int count_  =  1;
+    int count_ = 1;
     std::string str_;
   };
 
