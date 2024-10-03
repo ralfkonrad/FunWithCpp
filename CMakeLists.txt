@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.22.0)
+cmake_minimum_required(VERSION 3.28.0)
 
 # Default build type for single-config generators (set this before project() command)
 # For multi-config generators, such as Visual Studio, use: cmake --build . --config=<CONFIG>
