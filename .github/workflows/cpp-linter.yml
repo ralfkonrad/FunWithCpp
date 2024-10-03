@@ -1,0 +1,29 @@
+name: cpp-linter
+
+on:
+  push:
+    branches:
+      - master
+  pull_request: { }
+  schedule:
+    - cron: '30 4 * * *'
+  workflow_dispatch: { }
+
+jobs:
+  cpp-linter:
+    runs-on: ubuntu-24.04
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: cpp-linter
+        uses: cpp-linter/cpp-linter-action@v2
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          version: '18'
+          files-changed-only: false
+          style: 'file'   # Use .clang-format config file
+          tidy-checks: '' # Use .clang-tidy config file
+          step-summary: true
+          thread-comments: ${{ github.event_name == 'pull_request' && 'update' }}
