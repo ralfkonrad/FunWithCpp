@@ -61,7 +61,6 @@ jobs:
         env:
           CC:                           ${{ matrix.settings.cc }}
           CXX:                          ${{ matrix.settings.cxx }}
-          CMAKE_CONFIG_TYPE:            Release
           CMAKE_CXX_COMPILER_LAUNCHER:  ${{ steps.setup.outputs.ccache-variant }}
         run: |
           cmake --version

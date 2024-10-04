@@ -1,8 +1,12 @@
 ---
 Language: Cpp
-Standard: c++17
+Standard: c++20
 
 BasedOnStyle: Chromium
 
 ColumnLimit: 100
 NamespaceIndentation: All
+
+# Ensure single new line at the end of source files.
+InsertNewlineAtEOF: True
+KeepEmptyLinesAtEOF: False
