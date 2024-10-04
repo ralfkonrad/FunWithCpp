@@ -8,6 +8,7 @@ on:
   workflow_dispatch: { }
 
 permissions:
+  contents: write
   pull-requests: write
 
 jobs:
@@ -29,8 +30,6 @@ jobs:
           tidy-checks: '' # Use .clang-tidy config file
           step-summary: true
           thread-comments: ${{ github.event_name == 'pull_request' && 'update' }}
-          tidy-review: true
-          format-review: true
 
       - name: Fail fast?!
         if: steps.linter.outputs.checks-failed > 0
